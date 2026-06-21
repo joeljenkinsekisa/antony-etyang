@@ -274,6 +274,48 @@
     }
 
     /* ===========================================================
+       6b. PHOTO GALLERY  (Moments With Dad)
+    =========================================================== */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 22px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .gallery figure {
+      position: relative;
+      overflow: hidden;
+      border-radius: 20px;
+      border: 1px solid rgba(217, 164, 65, 0.3);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .gallery img {
+      display: block;
+      width: 100%;
+      height: 320px;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .gallery figure:hover img { transform: scale(1.08); }
+    /* gold caption that slides up on hover */
+    .gallery figcaption {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 30px 16px 16px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      letter-spacing: 1px;
+      color: var(--gold-light);
+      text-align: center;
+      background: linear-gradient(transparent, rgba(12,10,8,0.9));
+      transform: translateY(8px);
+      opacity: 0.92;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+    .gallery figure:hover figcaption { transform: translateY(0); opacity: 1; }
+
+    /* ===========================================================
        7. MEMORY WALL
     =========================================================== */
     .memory-grid {
@@ -401,14 +443,9 @@
       <p class="always">We love you — today &amp; always</p>
     </div>
 
-    <!-- Right: Dad's photo (add a file named dad.png to the repo) -->
+    <!-- Right: Dad's photo -->
     <div class="hero-photo">
-      <!-- If dad.png fails to load, the fallback message shows instead -->
-      <img src="dad.png" alt="A photo of our beloved father"
-           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-      <div class="photo-fallback" style="display:none;">
-        Add a photo named <strong>&nbsp;dad.png&nbsp;</strong> to this folder to see Dad here. 🤍
-      </div>
+      <img src="dad-leader.png" alt="A portrait of our beloved father" />
     </div>
 
     <!-- Gold banner across the bottom -->
@@ -438,6 +475,31 @@
           shaped our lives. Happy Father's Day, Dad. You are truly irreplaceable.
         </p>
       </div>
+    </div>
+  </section>
+
+  <!-- ======================= MOMENTS WITH DAD (gallery) ======================= -->
+  <section class="reveal">
+    <h2 class="section-title">Moments With Dad</h2>
+    <p class="section-subtitle">The man we admire — in uniform, at home, and in the love he gives so freely.</p>
+
+    <div class="gallery">
+      <figure>
+        <img src="dad-leader.png" alt="Dad in uniform" loading="lazy" />
+        <figcaption>A strong leader</figcaption>
+      </figure>
+      <figure>
+        <img src="dad-grandchild.png" alt="Dad holding a grandchild" loading="lazy" />
+        <figcaption>A gentle heart</figcaption>
+      </figure>
+      <figure>
+        <img src="dad-family.png" alt="Dad with family" loading="lazy" />
+        <figcaption>Always with family</figcaption>
+      </figure>
+      <figure>
+        <img src="dad-portrait.png" alt="Portrait of Dad" loading="lazy" />
+        <figcaption>An inspiration</figcaption>
+      </figure>
     </div>
   </section>
 
