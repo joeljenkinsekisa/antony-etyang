@@ -4,101 +4,184 @@
   <meta charset="UTF-8" />
   <!-- Make the page responsive on mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Happy Father's Day</title>
+  <title>Happy Father's Day — A Tribute to Our Dad</title>
 
-  <!-- Elegant Google Fonts: Playfair (headings) + Poppins (body) -->
+  <!-- Elegant Google Fonts:
+       Cormorant (serif headings), Great Vibes (gold script), Poppins (body) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Great+Vibes&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <style>
     /* ===========================================================
-       1. THEME VARIABLES
-       We store our colors once so they are easy to reuse & change.
+       1. THEME VARIABLES  (black + gold, like the tribute card)
     =========================================================== */
     :root {
-      --navy: #0e1b33;        /* deep navy background */
-      --navy-soft: #16264a;   /* lighter navy for cards */
-      --gold: #d9a441;        /* warm gold accent */
-      --gold-light: #f3d27a;  /* glowing light gold */
-      --cream: #f7efe2;       /* soft cream text */
-      --brown: #5b4636;       /* soft brown */
-      --brown-soft: #7a6049;  /* lighter brown */
+      --black: #0c0a08;        /* deep luxury black */
+      --char: #171310;         /* charcoal for cards */
+      --navy: #0e1b33;         /* navy accent */
+      --gold: #d9a441;         /* warm gold */
+      --gold-light: #f3d27a;   /* glowing light gold */
+      --gold-deep: #b8860b;    /* deep antique gold */
+      --cream: #f7efe2;        /* soft cream text */
+      --brown: #7a6049;        /* soft brown */
     }
 
-    /* Reset default browser spacing */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html {
-      scroll-behavior: smooth; /* smooth scrolling between sections */
-    }
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Poppins', sans-serif;
       color: var(--cream);
-      /* A warm gradient blending navy, brown and a hint of gold */
-      background: radial-gradient(circle at 20% 10%, #1c2f57 0%, transparent 45%),
-                  radial-gradient(circle at 80% 0%, #3a2c1d 0%, transparent 40%),
-                  linear-gradient(160deg, var(--navy) 0%, #0a1325 60%, #1a1410 100%);
+      background:
+        radial-gradient(circle at 15% 8%, #241a10 0%, transparent 45%),
+        radial-gradient(circle at 85% 4%, #15233f 0%, transparent 40%),
+        linear-gradient(165deg, var(--black) 0%, #100c08 55%, #0a0f1c 100%);
       background-attachment: fixed;
       overflow-x: hidden;
-      line-height: 1.7;
+      line-height: 1.75;
     }
 
-    /* Headings use the elegant serif font */
-    h1, h2, h3 {
-      font-family: 'Playfair Display', serif;
-      font-weight: 600;
+    /* Decorative gold divider used in several places */
+    .divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin: 18px auto;
+      color: var(--gold);
     }
+    .divider::before, .divider::after {
+      content: "";
+      height: 1px;
+      width: 60px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    h1, h2, h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; }
 
     /* ===========================================================
-       2. HERO SECTION (full screen)
+       2. HERO  (photo + text, styled like the shared card)
     =========================================================== */
     .hero {
       position: relative;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
       align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px 20px;
       overflow: hidden;
+      /* elegant gold frame around the whole hero */
+      border-bottom: 3px solid var(--gold-deep);
     }
 
-    .hero h1 {
-      font-size: clamp(2.6rem, 8vw, 5.5rem);
-      background: linear-gradient(90deg, var(--gold-light), var(--gold), var(--gold-light));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      /* soft glow behind the gold title */
-      filter: drop-shadow(0 4px 18px rgba(217, 164, 65, 0.35));
+    /* floating hearts/stars layer */
+    #floaty-layer { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+
+    /* ----- left: the tribute text ----- */
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      padding: 6vw 4vw;
+      text-align: center;
       animation: fadeUp 1.4s ease both;
     }
 
-    .hero .subtitle {
-      margin-top: 18px;
-      font-size: clamp(1rem, 3vw, 1.5rem);
-      font-weight: 300;
-      letter-spacing: 0.5px;
+    .hero-text .happy {
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 10px;
+      font-size: clamp(1.3rem, 3vw, 2rem);
       color: var(--cream);
-      opacity: 0.9;
-      animation: fadeUp 1.4s ease 0.3s both;
+      text-transform: uppercase;
     }
 
-    /* small bouncing arrow hint to scroll */
-    .scroll-hint {
-      position: absolute;
-      bottom: 28px;
-      font-size: 1.6rem;
+    .hero-text .script {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(4rem, 11vw, 8rem);
+      line-height: 0.9;
+      margin: 6px 0;
+      background: linear-gradient(120deg, var(--gold-light), var(--gold), var(--gold-deep), var(--gold-light));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 6px 20px rgba(217, 164, 65, 0.4));
+    }
+
+    .hero-text .day {
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 14px;
+      font-size: clamp(1.6rem, 4vw, 2.8rem);
+      color: var(--cream);
+      text-transform: uppercase;
+    }
+
+    .hero-text .thanks {
+      max-width: 320px;
+      margin: 22px auto 0;
+      font-weight: 300;
+      opacity: 0.92;
+    }
+
+    .hero-text .hero-script-line {
+      font-family: 'Great Vibes', cursive;
+      font-size: clamp(2rem, 6vw, 3rem);
       color: var(--gold-light);
-      animation: bounce 2s infinite;
-      opacity: 0.8;
+      margin: 16px 0;
+    }
+
+    .hero-text .always {
+      letter-spacing: 3px;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      color: var(--cream);
+      opacity: 0.9;
+    }
+
+    /* ----- right: dad's photo ----- */
+    .hero-photo {
+      position: relative;
+      z-index: 2;
+      height: 100vh;
+      width: 100%;
+    }
+    .hero-photo img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+      object-position: top center;
+      /* soft fade so the photo blends into the black panel on the left */
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 22%);
+      mask-image: linear-gradient(90deg, transparent 0%, #000 22%);
+    }
+    /* graceful fallback shown if dad.jpg is missing */
+    .hero-photo .photo-fallback {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px;
+      background: linear-gradient(160deg, #1a1410, #0e0b08);
+      color: var(--brown);
+      font-style: italic;
+    }
+
+    /* gold banner across the bottom of the hero */
+    .hero-banner {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 3;
+      text-align: center;
+      padding: 14px 16px;
+      background: linear-gradient(90deg, rgba(14,27,51,0.0), rgba(14,27,51,0.85) 20%, rgba(14,27,51,0.85) 80%, rgba(14,27,51,0.0));
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 2px;
+      font-size: clamp(0.85rem, 2.4vw, 1.3rem);
+      color: var(--gold-light);
+      text-transform: uppercase;
     }
 
     /* ===========================================================
@@ -107,44 +190,42 @@
     .glow-card {
       position: relative;
       max-width: 760px;
-      margin: 40px auto 0;
-      padding: 40px 36px;
+      margin: 0 auto;
+      padding: 44px 38px;
       border-radius: 26px;
-      background: rgba(22, 38, 74, 0.55);
-      border: 1px solid rgba(217, 164, 65, 0.4);
+      background: rgba(23, 19, 16, 0.6);
+      border: 1px solid rgba(217, 164, 65, 0.45);
       backdrop-filter: blur(6px);
-      /* the glow */
-      box-shadow: 0 0 40px rgba(217, 164, 65, 0.25),
+      box-shadow: 0 0 40px rgba(217, 164, 65, 0.22),
                   inset 0 0 30px rgba(217, 164, 65, 0.06);
-      animation: glowPulse 4s ease-in-out infinite, fadeUp 1.4s ease 0.6s both;
+      animation: glowPulse 4s ease-in-out infinite;
     }
 
     .glow-card p {
-      font-size: clamp(1.05rem, 2.6vw, 1.4rem);
+      font-size: clamp(1.1rem, 2.6vw, 1.45rem);
       font-weight: 300;
       color: var(--cream);
       font-style: italic;
     }
 
     /* ===========================================================
-       4. BUTTONS
+       4. BUTTON
     =========================================================== */
     .btn {
       margin-top: 34px;
       display: inline-block;
       cursor: pointer;
-      padding: 16px 38px;
+      padding: 16px 40px;
       font-family: 'Poppins', sans-serif;
       font-size: 1.05rem;
       font-weight: 500;
-      color: var(--navy);
+      color: var(--black);
       border: none;
       border-radius: 50px;
       background: linear-gradient(90deg, var(--gold-light), var(--gold));
       box-shadow: 0 8px 24px rgba(217, 164, 65, 0.4);
       transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
-
     .btn:hover {
       transform: translateY(-3px) scale(1.03);
       box-shadow: 0 12px 30px rgba(217, 164, 65, 0.6);
@@ -152,25 +233,21 @@
 
     /* ===========================================================
        5. HIDDEN SPECIAL MESSAGE
-       Starts hidden, fades in when the button is clicked.
     =========================================================== */
     .special-message {
       max-width: 720px;
-      margin: 36px auto 0;
+      margin: 0 auto;
       padding: 0 20px;
-      /* hidden state */
       max-height: 0;
       opacity: 0;
       overflow: hidden;
       transition: opacity 1s ease, max-height 1.2s ease, margin 1s ease;
     }
-
     .special-message.show {
       opacity: 1;
-      max-height: 600px; /* enough room to reveal text */
+      max-height: 600px;
       margin-top: 40px;
     }
-
     .special-message p {
       font-size: clamp(1.05rem, 2.6vw, 1.35rem);
       font-weight: 300;
@@ -178,29 +255,26 @@
     }
 
     /* ===========================================================
-       6. SECTION LAYOUT HELPERS
+       6. SECTION HELPERS
     =========================================================== */
-    section {
-      padding: 90px 20px;
-    }
+    section { padding: 90px 20px; }
 
     .section-title {
       text-align: center;
-      font-size: clamp(2rem, 5vw, 3rem);
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
       color: var(--gold-light);
-      margin-bottom: 14px;
+      margin-bottom: 6px;
     }
-
     .section-subtitle {
       text-align: center;
       max-width: 640px;
-      margin: 0 auto 50px;
+      margin: 0 auto 44px;
       font-weight: 300;
       opacity: 0.85;
     }
 
     /* ===========================================================
-       7. MEMORY WALL (4 cards grid)
+       7. MEMORY WALL
     =========================================================== */
     .memory-grid {
       display: grid;
@@ -209,7 +283,6 @@
       max-width: 1000px;
       margin: 0 auto;
     }
-
     .memory-card {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid rgba(217, 164, 65, 0.25);
@@ -218,43 +291,20 @@
       text-align: center;
       transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     }
-
-    /* soft hover effect: lift and glow */
     .memory-card:hover {
       transform: translateY(-8px);
       border-color: var(--gold);
-      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.4),
-                  0 0 22px rgba(217, 164, 65, 0.25);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.5), 0 0 22px rgba(217,164,65,0.25);
     }
-
-    .memory-card .icon {
-      font-size: 2.6rem;
-      display: block;
-      margin-bottom: 14px;
-    }
-
-    .memory-card h3 {
-      color: var(--gold-light);
-      font-size: 1.4rem;
-      margin-bottom: 10px;
-    }
-
-    .memory-card p {
-      font-weight: 300;
-      font-size: 0.98rem;
-      opacity: 0.9;
-    }
+    .memory-card .icon { font-size: 2.6rem; display: block; margin-bottom: 14px; }
+    .memory-card h3 { color: var(--gold-light); font-size: 1.5rem; margin-bottom: 10px; }
+    .memory-card p { font-weight: 300; font-size: 0.98rem; opacity: 0.9; }
 
     /* ===========================================================
-       8. PROMISE SECTION
+       8. PROMISE
     =========================================================== */
-    .promise {
-      text-align: center;
-    }
-
-    .promise .glow-card {
-      margin-top: 30px;
-    }
+    .promise { text-align: center; }
+    .promise .glow-card { margin-top: 30px; }
 
     /* ===========================================================
        9. FOOTER
@@ -267,14 +317,10 @@
       opacity: 0.85;
       border-top: 1px solid rgba(217, 164, 65, 0.2);
     }
-
-    footer .heart {
-      color: var(--gold);
-    }
+    footer .heart { color: var(--gold); }
 
     /* ===========================================================
-       10. FLOATING BACKGROUND HEARTS / STARS
-       These tiny elements drift upward in the hero.
+       10. FLOATING + SPARKLE ELEMENTS
     =========================================================== */
     .floaty {
       position: absolute;
@@ -284,8 +330,6 @@
       pointer-events: none;
       animation: floatUp linear infinite;
     }
-
-    /* Sparkles created by JavaScript when the button is clicked */
     .spark {
       position: fixed;
       bottom: -30px;
@@ -296,46 +340,45 @@
     }
 
     /* ===========================================================
-       11. KEYFRAME ANIMATIONS
+       11. KEYFRAMES
     =========================================================== */
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(30px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-
     @keyframes glowPulse {
-      0%, 100% { box-shadow: 0 0 40px rgba(217,164,65,0.22), inset 0 0 30px rgba(217,164,65,0.05); }
-      50%      { box-shadow: 0 0 60px rgba(217,164,65,0.45), inset 0 0 40px rgba(217,164,65,0.12); }
+      0%,100% { box-shadow: 0 0 40px rgba(217,164,65,0.22), inset 0 0 30px rgba(217,164,65,0.05); }
+      50%     { box-shadow: 0 0 60px rgba(217,164,65,0.45), inset 0 0 40px rgba(217,164,65,0.12); }
     }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50%      { transform: translateY(10px); }
-    }
-
-    /* hearts/stars drift up and gently sway */
     @keyframes floatUp {
       0%   { transform: translateY(0) translateX(0); opacity: 0; }
       10%  { opacity: 0.8; }
       90%  { opacity: 0.8; }
       100% { transform: translateY(-110vh) translateX(40px); opacity: 0; }
     }
-
-    /* sparkles burst upward from the button */
     @keyframes sparkRise {
       0%   { transform: translateY(0) scale(0.6); opacity: 1; }
       100% { transform: translateY(-90vh) scale(1.2); opacity: 0; }
     }
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 1s ease, transform 1s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* Reveal-on-scroll helper (sections fade in) */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 1s ease, transform 1s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
+    /* ===========================================================
+       12. MOBILE: stack photo under the text
+    =========================================================== */
+    @media (max-width: 820px) {
+      .hero {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 60vh;
+        min-height: auto;
+      }
+      .hero-text { padding: 60px 24px 20px; }
+      .hero-photo { height: 60vh; }
+      .hero-photo img {
+        object-position: center 20%;
+        -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%);
+        mask-image: linear-gradient(180deg, transparent 0%, #000 18%);
+      }
     }
   </style>
 </head>
@@ -343,87 +386,105 @@
 
   <!-- ============================ HERO ============================ -->
   <header class="hero">
-    <!-- The floating hearts/stars are injected here by JavaScript -->
     <div id="floaty-layer"></div>
 
-    <h1>Happy Father's Day</h1>
-    <p class="subtitle">To the man whose love became my foundation.</p>
+    <!-- Left: tribute text (family / "our dad" voice) -->
+    <div class="hero-text">
+      <p class="happy">Happy</p>
+      <p class="script">Father's</p>
+      <p class="day">Day</p>
+      <div class="divider">♥</div>
 
-    <!-- Glowing center card with the main message -->
-    <div class="glow-card">
+      <p class="thanks">Thank you for your love, guidance and unwavering support.</p>
+      <p class="hero-script-line">You are our hero.</p>
+      <div class="divider">♥</div>
+      <p class="always">We love you — today &amp; always</p>
+    </div>
+
+    <!-- Right: Dad's photo (add a file named dad.jpg to the repo) -->
+    <div class="hero-photo">
+      <!-- If dad.jpg fails to load, the fallback message shows instead -->
+      <img src="dad.jpg" alt="A photo of our beloved father"
+           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+      <div class="photo-fallback" style="display:none;">
+        Add a photo named <strong>&nbsp;dad.jpg&nbsp;</strong> to this folder to see Dad here. 🤍
+      </div>
+    </div>
+
+    <!-- Gold banner across the bottom -->
+    <div class="hero-banner">A great Dad. A strong leader. An inspiration.</div>
+  </header>
+
+  <!-- ===================== OUR MESSAGE TO DAD ===================== -->
+  <section class="reveal" style="text-align:center;">
+    <h2 class="section-title">From All of Us</h2>
+    <div class="divider">♥</div>
+
+    <div class="glow-card" style="margin-top:20px;">
       <p>
-        Dad, your strength gave me courage, your wisdom gave me direction,
-        and your love gave me a home. Today, I celebrate not just what you do,
+        Dad, your strength gave us courage, your wisdom gave us direction,
+        and your love gave us a home. Today, we celebrate not just what you do,
         but who you are.
       </p>
 
-      <!-- Interactive button that reveals the hidden message -->
       <button class="btn" id="revealBtn" onclick="openMessage()">
         Open Your Special Message
       </button>
 
-      <!-- Hidden emotional message (revealed on click) -->
       <div class="special-message" id="specialMessage">
         <p>
           You are appreciated more than words can explain. Every sacrifice,
           every lesson, every silent prayer, and every moment of care has
-          shaped my life. Happy Father's Day, Dad. You are truly irreplaceable.
+          shaped our lives. Happy Father's Day, Dad. You are truly irreplaceable.
         </p>
-      </div>
-    </div>
-
-    <div class="scroll-hint">⌄</div>
-  </header>
-
-  <!-- ======================= MEMORY WALL ======================= -->
-  <section class="reveal">
-    <h2 class="section-title">Memory Wall</h2>
-    <p class="section-subtitle">
-      Four pieces of you that live in me every single day.
-    </p>
-
-    <div class="memory-grid">
-      <!-- Card 1 -->
-      <div class="memory-card">
-        <span class="icon">💪</span>
-        <h3>Your Strength</h3>
-        <p>You stood tall through every storm so I would never have to face the rain alone.</p>
-      </div>
-      <!-- Card 2 -->
-      <div class="memory-card">
-        <span class="icon">🤲</span>
-        <h3>Your Sacrifice</h3>
-        <p>You gave up so much, quietly, so that my dreams would have room to grow.</p>
-      </div>
-      <!-- Card 3 -->
-      <div class="memory-card">
-        <span class="icon">📖</span>
-        <h3>Your Wisdom</h3>
-        <p>Your words became the compass I still follow when the path is unclear.</p>
-      </div>
-      <!-- Card 4 -->
-      <div class="memory-card">
-        <span class="icon">❤️</span>
-        <h3>Your Love</h3>
-        <p>Your love turned a house into a home and a child into who I am today.</p>
       </div>
     </div>
   </section>
 
-  <!-- ======================= A PROMISE FROM ME ======================= -->
+  <!-- ======================= MEMORY WALL ======================= -->
+  <section class="reveal">
+    <h2 class="section-title">Memory Wall</h2>
+    <p class="section-subtitle">Four pieces of you that live in us every single day.</p>
+
+    <div class="memory-grid">
+      <div class="memory-card">
+        <span class="icon">💪</span>
+        <h3>Your Strength</h3>
+        <p>You stood tall through every storm so we would never have to face the rain alone.</p>
+      </div>
+      <div class="memory-card">
+        <span class="icon">🤲</span>
+        <h3>Your Sacrifice</h3>
+        <p>You gave up so much, quietly, so that our dreams would have room to grow.</p>
+      </div>
+      <div class="memory-card">
+        <span class="icon">📖</span>
+        <h3>Your Wisdom</h3>
+        <p>Your words became the compass we still follow when the path is unclear.</p>
+      </div>
+      <div class="memory-card">
+        <span class="icon">❤️</span>
+        <h3>Your Love</h3>
+        <p>Your love turned a house into a home and made us the family we are today.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= A PROMISE FROM US ======================= -->
   <section class="promise reveal">
-    <h2 class="section-title">A Promise From Me</h2>
+    <h2 class="section-title">A Promise From Us</h2>
+    <div class="divider">♥</div>
     <div class="glow-card">
       <p>
-        I will carry your lessons with pride, honor your sacrifices with action,
-        and make you proud through the life I build.
+        We will carry your lessons with pride, honor your sacrifices with action,
+        and make you proud through the lives we build.
       </p>
     </div>
   </section>
 
   <!-- ============================ FOOTER ============================ -->
   <footer>
-    Made with <span class="heart">♥</span> for the world's greatest Dad.
+    Made with <span class="heart">♥</span> for the world's greatest Dad — a great Dad, a strong leader, an inspiration.
   </footer>
 
   <script>
@@ -431,70 +492,60 @@
        JAVASCRIPT
     =========================================================== */
 
-    /* ---- 1. Create floating hearts & stars in the hero ---- */
+    /* ---- 1. Floating hearts & stars in the hero ---- */
     const floatyLayer = document.getElementById('floaty-layer');
-    const floatyIcons = ['❤️', '⭐', '✨', '💛', '🌟']; // mix of hearts and stars
+    const floatyIcons = ['❤️', '⭐', '✨', '💛', '🌟'];
 
-    // Make a number of floating elements with random position, size & speed
     function createFloaties(count) {
       for (let i = 0; i < count; i++) {
         const el = document.createElement('span');
         el.className = 'floaty';
         el.textContent = floatyIcons[Math.floor(Math.random() * floatyIcons.length)];
-
-        el.style.left = Math.random() * 100 + 'vw';          // random horizontal spot
-        el.style.fontSize = (0.9 + Math.random() * 1.6) + 'rem'; // random size
-        el.style.animationDuration = (8 + Math.random() * 10) + 's'; // random speed
-        el.style.animationDelay = (Math.random() * 10) + 's';  // staggered start
-
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.fontSize = (0.9 + Math.random() * 1.6) + 'rem';
+        el.style.animationDuration = (8 + Math.random() * 10) + 's';
+        el.style.animationDelay = (Math.random() * 10) + 's';
         floatyLayer.appendChild(el);
       }
     }
     createFloaties(22);
 
-    /* ---- 2. Reveal the hidden special message + sparkles ---- */
+    /* ---- 2. Reveal hidden message + sparkle shower ---- */
     function openMessage() {
       const message = document.getElementById('specialMessage');
       const btn = document.getElementById('revealBtn');
-
-      message.classList.add('show');     // triggers the CSS fade-in
-      btn.textContent = '💛 With all my love';
+      message.classList.add('show');
+      btn.textContent = '💛 With all our love';
       btn.disabled = true;
       btn.style.cursor = 'default';
-
-      burstSparkles(40); // shower of golden sparkles
+      burstSparkles(45);
     }
 
-    /* ---- 3. Golden sparkle burst across the screen ---- */
+    /* ---- 3. Golden sparkles ---- */
     function burstSparkles(count) {
       const sparkIcons = ['✨', '💛', '⭐', '🌟', '❤️'];
       for (let i = 0; i < count; i++) {
         const spark = document.createElement('span');
         spark.className = 'spark';
         spark.textContent = sparkIcons[Math.floor(Math.random() * sparkIcons.length)];
-
         spark.style.left = Math.random() * 100 + 'vw';
         spark.style.fontSize = (1 + Math.random() * 1.4) + 'rem';
         spark.style.animationDuration = (2.5 + Math.random() * 2.5) + 's';
-
         document.body.appendChild(spark);
-
-        // Clean up each sparkle after it finishes so the page stays light
         setTimeout(() => spark.remove(), 5000);
       }
     }
 
-    /* ---- 4. Fade sections in as they scroll into view ---- */
+    /* ---- 4. Fade sections in on scroll ---- */
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          observer.unobserve(entry.target); // animate only once
+          observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.15 });
-
     reveals.forEach(section => observer.observe(section));
   </script>
 </body>
