@@ -121,6 +121,10 @@
     border:2px dashed var(--blue-300);background:var(--soft);color:var(--muted);
     border-radius:10px;padding:16px;text-align:center;font-size:14px;font-style:italic;margin:18px 0;
   }
+  /* ---------- FIGURES / SVG ILLUSTRATIONS ---------- */
+  figure{margin:22px 0;text-align:center;}
+  figure svg{max-width:100%;height:auto;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 2px 10px rgba(10,37,64,.07);}
+  figcaption{font-size:13px;color:var(--muted);margin-top:8px;font-style:italic;}
 
   hr{border:none;border-top:1px solid var(--line);margin:34px 0;}
 
@@ -218,14 +222,33 @@
     <li><strong>Kobo Collect</strong> → the <strong>Android mobile app</strong> field workers (enumerators) use to fill and submit forms, even without internet.</li>
   </ul>
   <div class="callout note">🧭 Think of it this way: KoboToolbox is the "headquarters" (the brain and warehouse), and Kobo Collect is the "field agent" (the data collector).</div>
-  <pre class="diagram">   ┌────────────────────────┐          ┌────────────────────────┐
-   │     KOBO COLLECT        │          │      KOBOTOOLBOX        │
-   │   (Mobile App / Field)  │  ──────▶ │   (Web Server / HQ)    │
-   │                         │  Sync    │                        │
-   │  • Fill forms offline   │  Data    │  • Design forms        │
-   │  • Capture GPS, photos  │          │  • Store submissions   │
-   │  • Submit when online   │          │  • Export & API access │
-   └────────────────────────┘          └────────────────────────┘</pre>
+  <figure>
+    <svg viewBox="0 0 620 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <defs><marker id="arrowHQ" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#27ae60"/></marker></defs>
+      <!-- Kobo Collect card -->
+      <rect x="20" y="30" width="250" height="140" rx="12" fill="#e9f2fb" stroke="#1565c0" stroke-width="2"/>
+      <text x="145" y="58" text-anchor="middle" font-size="14" font-weight="bold" fill="#0a2540">📱 KOBO COLLECT</text>
+      <text x="145" y="76" text-anchor="middle" font-size="10" fill="#5b6b7b">Mobile App / Field — the "Field Agent"</text>
+      <g font-size="11" fill="#1c2b3a">
+        <text x="44" y="104">• Fill forms offline</text>
+        <text x="44" y="126">• Capture GPS, photos</text>
+        <text x="44" y="148">• Submit when online</text>
+      </g>
+      <!-- arrow -->
+      <line x1="272" y1="100" x2="346" y2="100" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowHQ)"/>
+      <text x="309" y="92" text-anchor="middle" font-size="9" fill="#27ae60" font-weight="bold">Sync data</text>
+      <!-- KoboToolbox card -->
+      <rect x="350" y="30" width="250" height="140" rx="12" fill="#0a2540"/>
+      <text x="475" y="58" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">☁️ KOBOTOOLBOX</text>
+      <text x="475" y="76" text-anchor="middle" font-size="10" fill="#90caf9">Web Server / HQ — the "Headquarters"</text>
+      <g font-size="11" fill="#e8f1fb">
+        <text x="374" y="104">• Design forms</text>
+        <text x="374" y="126">• Store submissions</text>
+        <text x="374" y="148">• Export &amp; API access</text>
+      </g>
+    </svg>
+    <figcaption>Figure 1.0 — Kobo Collect (the field agent) syncs data to KoboToolbox (the headquarters).</figcaption>
+  </figure>
 
   <h3>1.4 Why Organizations Use KoboToolbox</h3>
   <ul>
@@ -257,13 +280,70 @@
   </ul>
 
   <h3>1.7 Illustrations</h3>
-  <div class="placeholder">🖼️ [Screenshot 1.1] — Kobo Collect mobile app showing a form being filled on an Android phone.</div>
-  <div class="placeholder">🖼️ [Screenshot 1.2] — KoboToolbox web platform dashboard showing projects and submission counts.</div>
-  <pre class="diagram">  Design Form          Deploy to Field        Collect Data         Analyze
- ┌───────────┐        ┌───────────────┐      ┌───────────┐      ┌───────────┐
- │ KoboToolbox│ ────▶ │  Kobo Collect │ ───▶ │ Kobo Server│ ───▶│  Power BI │
- │  (Web)     │        │  (Mobile App) │ Sync │ (Storage)  │ API │ Dashboard │
- └───────────┘        └───────────────┘      └───────────┘      └───────────┘</pre>
+  <figure>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <!-- Phone: Kobo Collect -->
+      <rect x="40" y="20" width="180" height="280" rx="22" fill="#0a2540"/>
+      <rect x="52" y="46" width="156" height="228" rx="6" fill="#ffffff"/>
+      <rect x="52" y="46" width="156" height="34" fill="#1565c0"/>
+      <text x="64" y="68" fill="#fff" font-size="13" font-weight="bold">Kobo Collect</text>
+      <circle cx="130" cy="288" r="9" fill="#2b3f54"/>
+      <!-- form fields -->
+      <text x="64" y="104" fill="#0a2540" font-size="10" font-weight="bold">Household Survey 2026</text>
+      <text x="64" y="126" fill="#5b6b7b" font-size="9">Respondent name</text>
+      <rect x="64" y="132" width="132" height="16" rx="3" fill="#e9f2fb" stroke="#90caf9"/>
+      <text x="64" y="166" fill="#5b6b7b" font-size="9">Region</text>
+      <rect x="64" y="172" width="132" height="16" rx="3" fill="#e9f2fb" stroke="#90caf9"/>
+      <text x="64" y="206" fill="#5b6b7b" font-size="9">Household size</text>
+      <rect x="64" y="212" width="60" height="16" rx="3" fill="#e9f2fb" stroke="#90caf9"/>
+      <rect x="64" y="244" width="132" height="22" rx="5" fill="#27ae60"/>
+      <text x="92" y="259" fill="#fff" font-size="10" font-weight="bold">Submit ▶</text>
+      <!-- Web platform -->
+      <rect x="270" y="40" width="340" height="240" rx="10" fill="#0a2540"/>
+      <rect x="282" y="64" width="316" height="204" rx="4" fill="#f5f9fd"/>
+      <rect x="282" y="64" width="316" height="28" fill="#1565c0"/>
+      <circle cx="298" cy="78" r="4" fill="#ff5f57"/><circle cx="312" cy="78" r="4" fill="#febc2e"/><circle cx="326" cy="78" r="4" fill="#28c840"/>
+      <text x="360" y="82" fill="#fff" font-size="11" font-weight="bold">KoboToolbox — Projects</text>
+      <!-- project rows -->
+      <g font-size="10" fill="#1c2b3a">
+        <rect x="296" y="104" width="288" height="34" rx="4" fill="#fff" stroke="#d6e3f0"/>
+        <text x="306" y="118" font-weight="bold">Household Survey 2026</text><text x="306" y="131" fill="#5b6b7b" font-size="9">Deployed</text>
+        <rect x="520" y="110" width="54" height="22" rx="4" fill="#e9f2fb"/><text x="528" y="125" fill="#0b4f9c" font-weight="bold">1,248</text>
+        <rect x="296" y="146" width="288" height="34" rx="4" fill="#fff" stroke="#d6e3f0"/>
+        <text x="306" y="160" font-weight="bold">Clinic Visits</text><text x="306" y="173" fill="#5b6b7b" font-size="9">Deployed</text>
+        <rect x="520" y="152" width="54" height="22" rx="4" fill="#e9f2fb"/><text x="528" y="167" fill="#0b4f9c" font-weight="bold">863</text>
+        <rect x="296" y="188" width="288" height="34" rx="4" fill="#fff" stroke="#d6e3f0"/>
+        <text x="306" y="202" font-weight="bold">Farmer Registration</text><text x="306" y="215" fill="#5b6b7b" font-size="9">Deployed</text>
+        <rect x="520" y="194" width="54" height="22" rx="4" fill="#e9f2fb"/><text x="528" y="209" fill="#0b4f9c" font-weight="bold">540</text>
+      </g>
+      <text x="296" y="248" fill="#5b6b7b" font-size="9">Submissions update in real time as enumerators sync</text>
+    </svg>
+    <figcaption>Figure 1.1 — Kobo Collect mobile app (left) and the KoboToolbox web platform showing projects and live submission counts (right).</figcaption>
+  </figure>
+  <figure>
+    <svg viewBox="0 0 760 150" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <defs><marker id="arrow1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1565c0"/></marker></defs>
+      <g text-anchor="middle">
+        <rect x="20"  y="45" width="120" height="60" rx="10" fill="#e9f2fb" stroke="#1565c0" stroke-width="2"/>
+        <text x="80"  y="72" font-size="20">📝</text><text x="80" y="95" font-size="11" font-weight="bold" fill="#0a2540">Design Form</text>
+        <rect x="180" y="45" width="120" height="60" rx="10" fill="#e9f2fb" stroke="#1565c0" stroke-width="2"/>
+        <text x="240" y="72" font-size="20">📱</text><text x="240" y="95" font-size="11" font-weight="bold" fill="#0a2540">Collect (Mobile)</text>
+        <rect x="340" y="45" width="120" height="60" rx="10" fill="#e9f2fb" stroke="#1565c0" stroke-width="2"/>
+        <text x="400" y="72" font-size="20">☁️</text><text x="400" y="95" font-size="11" font-weight="bold" fill="#0a2540">Kobo Server</text>
+        <rect x="500" y="45" width="120" height="60" rx="10" fill="#dff5e6" stroke="#27ae60" stroke-width="2"/>
+        <text x="560" y="72" font-size="20">🔗</text><text x="560" y="95" font-size="11" font-weight="bold" fill="#0a2540">API</text>
+        <rect x="640" y="45" width="100" height="60" rx="10" fill="#fff4e5" stroke="#e67e22" stroke-width="2"/>
+        <text x="690" y="72" font-size="20">📊</text><text x="690" y="95" font-size="11" font-weight="bold" fill="#0a2540">Power BI</text>
+      </g>
+      <g stroke="#1565c0" stroke-width="2" marker-end="url(#arrow1)">
+        <line x1="142" y1="75" x2="176" y2="75"/><line x1="302" y1="75" x2="336" y2="75"/>
+        <line x1="462" y1="75" x2="496" y2="75"/><line x1="622" y1="75" x2="636" y2="75"/>
+      </g>
+      <text x="319" y="40" font-size="9" fill="#5b6b7b" text-anchor="middle">sync</text>
+      <text x="630" y="40" font-size="9" fill="#5b6b7b" text-anchor="middle">JSON</text>
+    </svg>
+    <figcaption>Figure 1.2 — The complete data-collection workflow, from form design to a live Power BI dashboard.</figcaption>
+  </figure>
 </section>
 
 <!-- ============ CH2 ============ -->
@@ -287,12 +367,35 @@
   <p>Traditional exports (Excel, CSV, SPSS, GeoJSON) are useful for one-off downloads but are <strong>manual</strong>. The API replaces them with <strong>automation</strong>.</p>
 
   <h3>2.2 End-to-End Architecture</h3>
-  <pre class="diagram"> ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
- │ MOBILE DEVICE│───▶│  KOBO SERVER │───▶│   API LAYER  │───▶│   POWER BI   │───▶│  DASHBOARD   │
- │(Kobo Collect)│    │ (Storage DB) │    │(REST + Token)│    │(Power Query) │    │  (Reports)   │
- └──────────────┘    └──────────────┘    └──────────────┘    └──────────────┘    └──────────────┘
-   Field Worker        Central Store       Secure Access       Transform Data      Decision-Making
-   submits data        of submissions      via Token Auth       & Model             Insights</pre>
+  <figure>
+    <svg viewBox="0 0 780 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <defs><marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0b4f9c"/></marker></defs>
+      <g text-anchor="middle">
+        <rect x="10"  y="50" width="130" height="70" rx="10" fill="#0a2540"/>
+        <text x="75" y="78" font-size="22">📱</text><text x="75" y="100" font-size="11" font-weight="bold" fill="#fff">MOBILE DEVICE</text><text x="75" y="114" font-size="8" fill="#90caf9">Kobo Collect</text>
+        <rect x="170" y="50" width="130" height="70" rx="10" fill="#0b4f9c"/>
+        <text x="235" y="78" font-size="22">🗄️</text><text x="235" y="100" font-size="11" font-weight="bold" fill="#fff">KOBO SERVER</text><text x="235" y="114" font-size="8" fill="#90caf9">Storage DB</text>
+        <rect x="330" y="50" width="130" height="70" rx="10" fill="#1565c0"/>
+        <text x="395" y="78" font-size="22">🔗</text><text x="395" y="100" font-size="11" font-weight="bold" fill="#fff">API LAYER</text><text x="395" y="114" font-size="8" fill="#cfe2ff">REST + Token</text>
+        <rect x="490" y="50" width="130" height="70" rx="10" fill="#1e88e5"/>
+        <text x="555" y="78" font-size="22">⚙️</text><text x="555" y="100" font-size="11" font-weight="bold" fill="#fff">POWER BI</text><text x="555" y="114" font-size="8" fill="#e9f2fb">Power Query</text>
+        <rect x="650" y="50" width="120" height="70" rx="10" fill="#27ae60"/>
+        <text x="710" y="78" font-size="22">📊</text><text x="710" y="100" font-size="11" font-weight="bold" fill="#fff">DASHBOARD</text><text x="710" y="114" font-size="8" fill="#dff5e6">Reports</text>
+      </g>
+      <g stroke="#0b4f9c" stroke-width="2.5" marker-end="url(#arrow2)">
+        <line x1="140" y1="85" x2="166" y2="85"/><line x1="300" y1="85" x2="326" y2="85"/>
+        <line x1="460" y1="85" x2="486" y2="85"/><line x1="620" y1="85" x2="646" y2="85"/>
+      </g>
+      <g text-anchor="middle" font-size="9" fill="#5b6b7b">
+        <text x="75" y="145">Field worker</text><text x="75" y="158">submits data</text>
+        <text x="235" y="145">Central store</text><text x="235" y="158">of submissions</text>
+        <text x="395" y="145">Secure access</text><text x="395" y="158">via token auth</text>
+        <text x="555" y="145">Transform</text><text x="555" y="158">&amp; model</text>
+        <text x="710" y="145">Decision-</text><text x="710" y="158">making insights</text>
+      </g>
+    </svg>
+    <figcaption>Figure 2.1 — End-to-end KoboToolbox → Power BI architecture (branded blue/white styling).</figcaption>
+  </figure>
 
   <h3>2.3 How Data Flows</h3>
   <ol>
@@ -302,7 +405,6 @@
     <li>The API returns the submissions as structured data.</li>
     <li>Power BI <strong>cleans, models, and visualizes</strong> the data into a <strong>dashboard</strong>.</li>
   </ol>
-  <div class="placeholder">🖼️ [Diagram 2.1] — Architecture diagram with branded blue/white styling.</div>
 </section>
 
 <!-- ============ CH3 ============ -->
@@ -373,7 +475,30 @@
   <p><strong>API Token</strong> — Covered step-by-step in Chapter 5.</p>
   <p><strong>Power BI Desktop</strong> — Download free from <a href="https://powerbi.microsoft.com">powerbi.microsoft.com</a> (Windows only).</p>
   <p><strong>Internet</strong> — Required during refresh. Field collection in Kobo Collect remains offline-capable.</p>
-  <div class="placeholder">🖼️ [Screenshot 4.1] — A deployed form showing "Deployed" status and a submission count greater than zero.</div>
+  <figure>
+    <svg viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="10" y="10" width="600" height="200" rx="10" fill="#f5f9fd" stroke="#d6e3f0"/>
+      <rect x="10" y="10" width="600" height="40" rx="10" fill="#1565c0"/>
+      <text x="28" y="36" fill="#fff" font-size="14" font-weight="bold">KoboToolbox · Household Survey 2026</text>
+      <!-- status badge -->
+      <rect x="28" y="70" width="120" height="30" rx="15" fill="#dff5e6" stroke="#27ae60"/>
+      <circle cx="46" cy="85" r="5" fill="#27ae60"/>
+      <text x="58" y="90" fill="#1e7a3d" font-size="12" font-weight="bold">Deployed</text>
+      <!-- summary tiles -->
+      <g>
+        <rect x="28"  y="120" width="170" height="74" rx="8" fill="#fff" stroke="#d6e3f0"/>
+        <text x="113" y="150" text-anchor="middle" font-size="26" font-weight="bold" fill="#0b4f9c">1,248</text>
+        <text x="113" y="172" text-anchor="middle" font-size="11" fill="#5b6b7b">Submissions</text>
+        <rect x="222" y="120" width="170" height="74" rx="8" fill="#fff" stroke="#d6e3f0"/>
+        <text x="307" y="150" text-anchor="middle" font-size="26" font-weight="bold" fill="#0b4f9c">42</text>
+        <text x="307" y="172" text-anchor="middle" font-size="11" fill="#5b6b7b">Questions</text>
+        <rect x="416" y="120" width="170" height="74" rx="8" fill="#fff" stroke="#d6e3f0"/>
+        <text x="501" y="150" text-anchor="middle" font-size="26" font-weight="bold" fill="#0b4f9c">12</text>
+        <text x="501" y="172" text-anchor="middle" font-size="11" fill="#5b6b7b">Enumerators</text>
+      </g>
+    </svg>
+    <figcaption>Figure 4.1 — A deployed form showing "Deployed" status and a submission count greater than zero.</figcaption>
+  </figure>
 </section>
 
 <!-- ============ CH5 ============ -->
@@ -384,20 +509,77 @@
 
   <h3>Step 1 — Log in to KoboToolbox</h3>
   <p>Go to your server: <code>https://kf.kobotoolbox.org</code> (or <code>eu.kobotoolbox.org</code>). Enter your username and password.</p>
-  <div class="placeholder">🖼️ [Screenshot 5.1] — KoboToolbox login page.</div>
+  <figure>
+    <svg viewBox="0 0 420 230" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="420" height="230" rx="10" fill="#0a2540"/>
+      <rect x="120" y="30" width="180" height="170" rx="10" fill="#fff"/>
+      <text x="210" y="60" text-anchor="middle" font-size="14" font-weight="bold" fill="#1565c0">KoboToolbox</text>
+      <text x="138" y="88" font-size="9" fill="#5b6b7b">Username</text>
+      <rect x="138" y="94" width="144" height="22" rx="4" fill="#e9f2fb" stroke="#90caf9"/>
+      <text x="138" y="132" font-size="9" fill="#5b6b7b">Password</text>
+      <rect x="138" y="138" width="144" height="22" rx="4" fill="#e9f2fb" stroke="#90caf9"/>
+      <rect x="138" y="170" width="144" height="24" rx="5" fill="#1565c0"/>
+      <text x="210" y="186" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">Log in ▶</text>
+    </svg>
+    <figcaption>Figure 5.1 — KoboToolbox login page.</figcaption>
+  </figure>
 
   <h3>Step 2 — Open Account Settings</h3>
   <p>Click your <strong>account icon / name</strong> (top-right), then <strong>Account Settings</strong>.</p>
-  <div class="placeholder">🖼️ [Screenshot 5.2] — Account menu highlighting "Account Settings".</div>
+  <figure>
+    <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="420" height="40" fill="#1565c0"/>
+      <text x="16" y="26" fill="#fff" font-size="13" font-weight="bold">KoboToolbox</text>
+      <circle cx="392" cy="20" r="12" fill="#0a2540"/><text x="392" y="25" text-anchor="middle" fill="#fff" font-size="11">JE</text>
+      <!-- dropdown -->
+      <rect x="280" y="40" width="130" height="120" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="296" y="66" font-size="11" fill="#1c2b3a">My Profile</text>
+      <rect x="284" y="78" width="122" height="26" rx="5" fill="#e9f2fb"/>
+      <text x="296" y="95" font-size="11" font-weight="bold" fill="#0b4f9c">Account Settings ◀</text>
+      <text x="296" y="124" font-size="11" fill="#1c2b3a">Language</text>
+      <text x="296" y="148" font-size="11" fill="#c0392b">Log out</text>
+    </svg>
+    <figcaption>Figure 5.2 — Account menu highlighting "Account Settings".</figcaption>
+  </figure>
 
   <h3>Step 3 — Navigate to API Access</h3>
   <p>In the settings sidebar, find the <strong>Security</strong> section (or scroll to <strong>API Access</strong>) where your token is shown.</p>
-  <div class="placeholder">🖼️ [Screenshot 5.3] — Security settings page showing the API token area.</div>
+  <figure>
+    <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="560" height="200" rx="10" fill="#f5f9fd" stroke="#d6e3f0"/>
+      <!-- sidebar -->
+      <rect x="0" y="0" width="150" height="200" rx="10" fill="#0a2540"/>
+      <text x="20" y="40" fill="#90caf9" font-size="11">Profile</text>
+      <text x="20" y="70" fill="#90caf9" font-size="11">Account</text>
+      <rect x="0" y="86" width="150" height="26" fill="#1565c0"/>
+      <text x="20" y="103" fill="#fff" font-size="11" font-weight="bold">Security</text>
+      <text x="20" y="134" fill="#90caf9" font-size="11">Notifications</text>
+      <!-- content -->
+      <text x="176" y="40" font-size="14" font-weight="bold" fill="#0a2540">API Access</text>
+      <text x="176" y="66" font-size="10" fill="#5b6b7b">Your secret token authorizes external apps (Power BI).</text>
+      <rect x="176" y="84" width="300" height="28" rx="5" fill="#e9f2fb" stroke="#90caf9"/>
+      <text x="186" y="102" font-size="11" fill="#5b6b7b" font-family="monospace">•••••••••••••••••• (hidden)</text>
+      <rect x="486" y="84" width="58" height="28" rx="5" fill="#1565c0"/>
+      <text x="515" y="102" text-anchor="middle" font-size="10" font-weight="bold" fill="#fff">Show</text>
+    </svg>
+    <figcaption>Figure 5.3 — Security settings page showing the API token area.</figcaption>
+  </figure>
 
   <h3>Step 4 — Generate / Reveal the Token</h3>
   <p>Click <strong>Show</strong> (or <strong>Generate</strong>). It is a long string, for example:</p>
   <pre><code>9a8b7c6d5e4f3g2h1i0j_EXAMPLE_TOKEN_abcdef123456</code></pre>
-  <div class="placeholder">🖼️ [Screenshot 5.4] — Revealed API token (blurred for privacy).</div>
+  <figure>
+    <svg viewBox="0 0 560 110" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="560" height="110" rx="10" fill="#f5f9fd" stroke="#d6e3f0"/>
+      <text x="20" y="34" font-size="12" font-weight="bold" fill="#0a2540">Your API Token</text>
+      <rect x="20" y="46" width="430" height="30" rx="5" fill="#0a2540"/>
+      <text x="34" y="66" font-size="12" fill="#9ad08f" font-family="monospace">9a8b7c6d5e4f••••••••••EXAMPLE••••••abcdef123456</text>
+      <rect x="460" y="46" width="80" height="30" rx="5" fill="#27ae60"/>
+      <text x="500" y="66" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">⧉ Copy</text>
+      <text x="20" y="96" font-size="9" fill="#c0392b">⚠ Keep this secret — anyone with the token can read your data.</text>
+    </svg>
+    <figcaption>Figure 5.4 — Revealed API token (partially masked for privacy) with a Copy button.</figcaption>
+  </figure>
 
   <h3>Step 5 — Copy and Securely Store</h3>
   <ul>
@@ -434,7 +616,18 @@
   <p>Open your form and look at the address bar:</p>
   <pre><code>https://kf.kobotoolbox.org/#/forms/aBcDeFg123456</code></pre>
   <p>The portion after <code>/forms/</code> is your <strong>Asset ID</strong>: <code>aBcDeFg123456</code></p>
-  <div class="placeholder">🖼️ [Screenshot 6.1] — Browser address bar with the Asset ID highlighted.</div>
+  <figure>
+    <svg viewBox="0 0 620 90" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="620" height="90" rx="10" fill="#e9eef3"/>
+      <circle cx="24" cy="24" r="6" fill="#ff5f57"/><circle cx="44" cy="24" r="6" fill="#febc2e"/><circle cx="64" cy="24" r="6" fill="#28c840"/>
+      <rect x="90" y="12" width="510" height="26" rx="13" fill="#fff" stroke="#c7d2dc"/>
+      <text x="104" y="30" font-size="12" font-family="monospace" fill="#5b6b7b">🔒 https://kf.kobotoolbox.org/#/forms/</text>
+      <rect x="392" y="14" width="120" height="22" rx="4" fill="#fff3c4" stroke="#e0b400"/>
+      <text x="402" y="30" font-size="12" font-family="monospace" font-weight="bold" fill="#0a2540">aBcDeFg123456</text>
+      <text x="90" y="66" font-size="11" fill="#0b4f9c">▲ The highlighted portion after <tspan font-family="monospace" font-weight="bold">/forms/</tspan> is your Asset ID.</text>
+    </svg>
+    <figcaption>Figure 6.1 — Browser address bar with the Asset ID portion highlighted.</figcaption>
+  </figure>
 
   <h4>Method 2 — From the Assets API</h4>
   <p>Visit <code>https://kf.kobotoolbox.org/api/v2/assets/?format=json</code> and copy your form's <code>uid</code>:</p>
@@ -490,15 +683,56 @@
 
   <h3>Step 1 — Open Power BI Desktop</h3>
   <p>Launch <strong>Power BI Desktop</strong> and close the splash screen.</p>
-  <div class="placeholder">🖼️ [Screenshot 8.1] — Power BI Desktop home screen.</div>
+  <figure>
+    <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="600" height="200" rx="8" fill="#f5f9fd" stroke="#d6e3f0"/>
+      <rect x="0" y="0" width="600" height="34" fill="#f2c811"/>
+      <text x="16" y="23" font-size="13" font-weight="bold" fill="#3a3a00">⬛ Power BI Desktop</text>
+      <rect x="0" y="34" width="600" height="30" fill="#fff" stroke="#e0e6ec"/>
+      <text x="16" y="54" font-size="11" fill="#1c2b3a" font-weight="bold">Home</text><text x="70" y="54" font-size="11" fill="#5b6b7b">Insert</text><text x="130" y="54" font-size="11" fill="#5b6b7b">Modeling</text><text x="210" y="54" font-size="11" fill="#5b6b7b">View</text>
+      <!-- canvas -->
+      <rect x="20" y="78" width="560" height="108" rx="6" fill="#fff" stroke="#e0e6ec" stroke-dasharray="4 4"/>
+      <text x="300" y="138" text-anchor="middle" font-size="13" fill="#9aa7b4">Blank report canvas — start by clicking “Get Data”</text>
+    </svg>
+    <figcaption>Figure 8.1 — Power BI Desktop home screen with the blank report canvas.</figcaption>
+  </figure>
 
   <h3>Step 2 — Get Data → Blank Query</h3>
   <p>On the <strong>Home</strong> ribbon: <strong>Get Data ▾ → Blank Query</strong>.</p>
-  <div class="placeholder">🖼️ [Screenshot 8.2] — Get Data menu with "Blank Query" selected.</div>
+  <figure>
+    <svg viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="380" height="220" rx="8" fill="#f5f9fd" stroke="#d6e3f0"/>
+      <rect x="20" y="16" width="110" height="30" rx="5" fill="#1565c0"/>
+      <text x="75" y="36" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">Get Data ▾</text>
+      <rect x="20" y="50" width="200" height="150" rx="6" fill="#fff" stroke="#d6e3f0"/>
+      <text x="34" y="74" font-size="11" fill="#1c2b3a">Excel Workbook</text>
+      <text x="34" y="100" font-size="11" fill="#1c2b3a">Web</text>
+      <text x="34" y="126" font-size="11" fill="#1c2b3a">SQL Server</text>
+      <rect x="24" y="138" width="192" height="26" rx="5" fill="#e9f2fb"/>
+      <text x="34" y="155" font-size="11" font-weight="bold" fill="#0b4f9c">Blank Query ◀</text>
+      <text x="34" y="184" font-size="11" fill="#1c2b3a">More…</text>
+    </svg>
+    <figcaption>Figure 8.2 — Get Data menu with "Blank Query" selected.</figcaption>
+  </figure>
 
   <h3>Step 3 — Open the Power Query Editor</h3>
   <p>From the <strong>Home</strong> tab, click <strong>Advanced Editor</strong>.</p>
-  <div class="placeholder">🖼️ [Screenshot 8.3] — Advanced Editor window (empty).</div>
+  <figure>
+    <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="600" height="200" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <rect x="0" y="0" width="600" height="30" fill="#1565c0"/>
+      <text x="16" y="20" font-size="12" font-weight="bold" fill="#fff">Advanced Editor — KoboData</text>
+      <rect x="14" y="44" width="572" height="120" rx="5" fill="#0a2540"/>
+      <text x="28" y="66" font-size="11" font-family="monospace" fill="#9ad08f">let</text>
+      <text x="40" y="84" font-size="11" font-family="monospace" fill="#e8f1fb">ApiToken = "YOUR_API_TOKEN_HERE",</text>
+      <text x="40" y="102" font-size="11" font-family="monospace" fill="#e8f1fb">AssetUID = "YOUR_ASSET_UID_HERE",</text>
+      <text x="40" y="120" font-size="11" font-family="monospace" fill="#90caf9">Source = Web.Contents(DataUrl, [Headers=…])</text>
+      <text x="28" y="146" font-size="11" font-family="monospace" fill="#9ad08f">in  ExpandedTable</text>
+      <rect x="500" y="170" width="84" height="22" rx="4" fill="#27ae60"/>
+      <text x="542" y="185" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">Done</text>
+    </svg>
+    <figcaption>Figure 8.3 — Advanced Editor with the documented M script pasted in.</figcaption>
+  </figure>
 
   <h3>Step 4 — Create the API Connection</h3>
   <p>Paste the script below and replace <code>YOUR_API_TOKEN_HERE</code> and <code>YOUR_ASSET_UID_HERE</code> with your own values.</p>
@@ -577,7 +811,33 @@ in
     <li>Click <strong>Close &amp; Apply</strong>.</li>
   </ol>
   <div class="callout tip">🎉 Your KoboToolbox submissions are now loaded into Power BI!</div>
-  <div class="placeholder">🖼️ [Screenshot 8.4] — Power Query preview showing expanded submission columns.</div>
+  <figure>
+    <svg viewBox="0 0 600 190" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="600" height="190" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <rect x="0" y="0" width="600" height="28" fill="#1565c0"/>
+      <text x="14" y="19" font-size="12" font-weight="bold" fill="#fff">Power Query Editor — KoboData</text>
+      <!-- header row -->
+      <g font-size="10">
+        <rect x="10" y="34" width="100" height="24" fill="#0a2540"/><text x="20" y="50" fill="#fff">_id</text>
+        <rect x="110" y="34" width="150" height="24" fill="#0a2540"/><text x="120" y="50" fill="#fff">Respondent name</text>
+        <rect x="260" y="34" width="120" height="24" fill="#0a2540"/><text x="270" y="50" fill="#fff">Region</text>
+        <rect x="380" y="34" width="100" height="24" fill="#0a2540"/><text x="390" y="50" fill="#fff">Age</text>
+        <rect x="480" y="34" width="110" height="24" fill="#0a2540"/><text x="490" y="50" fill="#fff">Submission Time</text>
+      </g>
+      <g font-size="10" fill="#1c2b3a">
+        <rect x="10" y="58" width="580" height="22" fill="#fff" stroke="#eef3f8"/>
+        <text x="20" y="73">101</text><text x="120" y="73">Mary Atieno</text><text x="270" y="73">Western</text><text x="390" y="73">34</text><text x="490" y="73">2026-06-22</text>
+        <rect x="10" y="80" width="580" height="22" fill="#f5f9fd" stroke="#eef3f8"/>
+        <text x="20" y="95">102</text><text x="120" y="95">John Otieno</text><text x="270" y="95">Nyanza</text><text x="390" y="95">29</text><text x="490" y="95">2026-06-22</text>
+        <rect x="10" y="102" width="580" height="22" fill="#fff" stroke="#eef3f8"/>
+        <text x="20" y="117">103</text><text x="120" y="117">Grace Wanjiru</text><text x="270" y="117">Central</text><text x="390" y="117">41</text><text x="490" y="117">2026-06-23</text>
+        <rect x="10" y="124" width="580" height="22" fill="#f5f9fd" stroke="#eef3f8"/>
+        <text x="20" y="139">104</text><text x="120" y="139">Peter Mwangi</text><text x="270" y="139">Rift Valley</text><text x="390" y="139">37</text><text x="490" y="139">2026-06-23</text>
+      </g>
+      <text x="14" y="168" font-size="10" fill="#27ae60">✔ Records expanded into columns — 1,248 rows loaded</text>
+    </svg>
+    <figcaption>Figure 8.4 — Power Query preview showing expanded submission columns.</figcaption>
+  </figure>
 
   <h3>8.2 Line-by-Line Summary</h3>
   <table>
@@ -601,7 +861,20 @@ in
 
   <h3>9.1 Renaming Columns</h3>
   <p>Double-click a header and type a friendly name: <code>section_a/age</code> → <strong>Age</strong>, <code>_submission_time</code> → <strong>Submission Time</strong>.</p>
-  <div class="placeholder">🖼️ [Screenshot 9.1] — Renaming a column in Power Query.</div>
+  <figure>
+    <svg viewBox="0 0 560 130" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="560" height="130" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <rect x="20" y="20" width="240" height="26" fill="#0a2540"/>
+      <text x="30" y="37" font-size="11" font-family="monospace" fill="#fff">section_a/age</text>
+      <text x="280" y="38" font-size="16" fill="#1565c0">➜</text>
+      <rect x="310" y="20" width="240" height="26" fill="#1565c0"/>
+      <text x="320" y="37" font-size="12" font-weight="bold" fill="#fff">Age</text>
+      <text x="20" y="78" font-size="11" fill="#5b6b7b">Double-click the header and type a clean, friendly name.</text>
+      <rect x="20" y="92" width="240" height="22" fill="#e9f2fb" stroke="#90caf9"/>
+      <text x="30" y="107" font-size="11" font-family="monospace" fill="#0a2540">Age|</text>
+    </svg>
+    <figcaption>Figure 9.1 — Renaming a column in Power Query.</figcaption>
+  </figure>
 
   <h3>9.2 Setting Data Types</h3>
   <p>Assign correct types: Numbers → Whole/Decimal, Dates → Date/DateTime, Text → Text. Correct types are essential for calculations and time charts.</p>
@@ -630,7 +903,27 @@ SWITCH(
     MONTH('KoboData'[Submission Time]),
     DAY('KoboData'[Submission Time])
 )</code></pre>
-  <div class="placeholder">🖼️ [Screenshot 9.2] — A new calculated column created with DAX.</div>
+  <figure>
+    <svg viewBox="0 0 560 140" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="560" height="140" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <rect x="0" y="0" width="560" height="26" fill="#f2c811"/>
+      <text x="14" y="18" font-size="11" font-weight="bold" fill="#3a3a00">fx  Formula bar (DAX)</text>
+      <rect x="14" y="34" width="532" height="26" rx="4" fill="#0a2540"/>
+      <text x="24" y="51" font-size="11" font-family="monospace" fill="#9ad08f">Age Group = SWITCH(TRUE(), [Age]&lt;18,"Under 18", [Age]&lt;36,"18–35", "36+")</text>
+      <!-- result column -->
+      <g font-size="10">
+        <rect x="14" y="72" width="100" height="22" fill="#0a2540"/><text x="24" y="87" fill="#fff">Age</text>
+        <rect x="114" y="72" width="160" height="22" fill="#27ae60"/><text x="124" y="87" fill="#fff" font-weight="bold">Age Group ✨</text>
+      </g>
+      <g font-size="10" fill="#1c2b3a">
+        <rect x="14" y="94" width="100" height="20" fill="#fff" stroke="#eef3f8"/><text x="24" y="108">34</text>
+        <rect x="114" y="94" width="160" height="20" fill="#fff" stroke="#eef3f8"/><text x="124" y="108">18–35</text>
+        <rect x="14" y="114" width="100" height="20" fill="#f5f9fd" stroke="#eef3f8"/><text x="24" y="128">41</text>
+        <rect x="114" y="114" width="160" height="20" fill="#f5f9fd" stroke="#eef3f8"/><text x="124" y="128">36+</text>
+      </g>
+    </svg>
+    <figcaption>Figure 9.2 — A new calculated column created with DAX.</figcaption>
+  </figure>
 </section>
 
 <!-- ============ CH10 ============ -->
@@ -652,15 +945,34 @@ CALCULATE(
     COUNTROWS('KoboData'),
     'KoboData'[Submission Date] = TODAY()
 )</code></pre>
-  <pre class="diagram"> ┌────────────┐ ┌────────────┐ ┌────────────┐ ┌──────────────┐
- │   1,248    │ │     87     │ │    94%     │ │      12      │
- │   TOTAL    │ │   TODAY    │ │ COMPLETION │ │ ENUMERATORS  │
- └────────────┘ └────────────┘ └────────────┘ └──────────────┘
- ┌─────────────────────────────┐ ┌─────────────────────────────┐
- │   Submissions Over Time     │ │   Submissions by Enumerator │
- │   (Line chart)              │ │   (Bar chart)               │
- └─────────────────────────────┘ └─────────────────────────────┘</pre>
-  <div class="placeholder">🖼️ [Mockup 10.1] — Survey Monitoring Dashboard (blue/white theme).</div>
+  <figure>
+    <svg viewBox="0 0 620 320" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="620" height="320" rx="10" fill="#eef4fa"/>
+      <rect x="0" y="0" width="620" height="40" fill="#0a2540"/>
+      <text x="16" y="26" fill="#fff" font-size="15" font-weight="bold">Survey Monitoring Dashboard</text>
+      <!-- KPI cards -->
+      <g>
+        <rect x="16"  y="54" width="140" height="64" rx="8" fill="#fff" stroke="#d6e3f0"/><text x="86"  y="92" text-anchor="middle" font-size="24" font-weight="bold" fill="#1565c0">1,248</text><text x="86"  y="110" text-anchor="middle" font-size="10" fill="#5b6b7b">TOTAL RESPONSES</text>
+        <rect x="168" y="54" width="140" height="64" rx="8" fill="#fff" stroke="#d6e3f0"/><text x="238" y="92" text-anchor="middle" font-size="24" font-weight="bold" fill="#27ae60">87</text><text x="238" y="110" text-anchor="middle" font-size="10" fill="#5b6b7b">RESPONSES TODAY</text>
+        <rect x="320" y="54" width="140" height="64" rx="8" fill="#fff" stroke="#d6e3f0"/><text x="390" y="92" text-anchor="middle" font-size="24" font-weight="bold" fill="#1e88e5">94%</text><text x="390" y="110" text-anchor="middle" font-size="10" fill="#5b6b7b">COMPLETION RATE</text>
+        <rect x="472" y="54" width="132" height="64" rx="8" fill="#fff" stroke="#d6e3f0"/><text x="538" y="92" text-anchor="middle" font-size="24" font-weight="bold" fill="#8e44ad">12</text><text x="538" y="110" text-anchor="middle" font-size="10" fill="#5b6b7b">ENUMERATORS</text>
+      </g>
+      <!-- line chart -->
+      <rect x="16" y="132" width="290" height="172" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="30" y="154" font-size="12" font-weight="bold" fill="#0a2540">Submissions Over Time</text>
+      <polyline points="34,280 80,250 126,255 172,215 218,225 264,180 296,170" fill="none" stroke="#1565c0" stroke-width="3"/>
+      <polygon points="34,280 80,250 126,255 172,215 218,225 264,180 296,170 296,294 34,294" fill="#1565c0" opacity="0.12"/>
+      <g fill="#1565c0"><circle cx="80" cy="250" r="3"/><circle cx="172" cy="215" r="3"/><circle cx="264" cy="180" r="3"/></g>
+      <!-- bar chart -->
+      <rect x="318" y="132" width="286" height="172" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="332" y="154" font-size="12" font-weight="bold" fill="#0a2540">Submissions by Enumerator</text>
+      <g fill="#1e88e5">
+        <rect x="346" y="200" width="30" height="90"/><rect x="392" y="180" width="30" height="110"/><rect x="438" y="220" width="30" height="70"/>
+        <rect x="484" y="166" width="30" height="124"/><rect x="530" y="234" width="30" height="56"/><rect x="566" y="210" width="26" height="80"/>
+      </g>
+    </svg>
+    <figcaption>Figure 10.1 — Survey Monitoring Dashboard (blue/white theme).</figcaption>
+  </figure>
 
   <h3>10.2 Geographic Dashboard</h3>
   <p><strong>Purpose:</strong> See <em>where</em> data comes from using Kobo GPS questions.</p>
@@ -669,7 +981,34 @@ CALCULATE(
     <li>Filled Map by Region / County / District</li>
     <li>Slicers and drill-down: Region → County → District</li>
   </ul>
-  <div class="placeholder">🖼️ [Mockup 10.2] — Map dashboard with regional coloring.</div>
+  <figure>
+    <svg viewBox="0 0 620 280" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="620" height="280" rx="10" fill="#eef4fa"/>
+      <rect x="0" y="0" width="620" height="38" fill="#0a2540"/>
+      <text x="16" y="25" fill="#fff" font-size="15" font-weight="bold">Geographic Dashboard</text>
+      <!-- map area -->
+      <rect x="16" y="52" width="380" height="212" rx="8" fill="#dbe9f6" stroke="#d6e3f0"/>
+      <!-- abstract regions -->
+      <path d="M40,90 L150,70 L180,140 L90,180 Z" fill="#90caf9" stroke="#fff" stroke-width="2"/>
+      <path d="M180,140 L150,70 L260,80 L280,150 Z" fill="#1e88e5" stroke="#fff" stroke-width="2"/>
+      <path d="M90,180 L180,140 L210,230 L110,240 Z" fill="#1565c0" stroke="#fff" stroke-width="2"/>
+      <path d="M280,150 L260,80 L360,110 L350,200 L210,230 L180,140 Z" fill="#0b4f9c" stroke="#fff" stroke-width="2"/>
+      <!-- pins -->
+      <g fill="#e53935"><circle cx="120" cy="130" r="5"/><circle cx="220" cy="120" r="5"/><circle cx="180" cy="200" r="5"/><circle cx="300" cy="160" r="5"/></g>
+      <!-- legend / slicer -->
+      <rect x="408" y="52" width="196" height="212" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="422" y="74" font-size="12" font-weight="bold" fill="#0a2540">Submissions by Region</text>
+      <g font-size="11" fill="#1c2b3a">
+        <rect x="422" y="86" width="14" height="14" fill="#0b4f9c"/><text x="444" y="98">Rift Valley — 420</text>
+        <rect x="422" y="110" width="14" height="14" fill="#1565c0"/><text x="444" y="122">Western — 305</text>
+        <rect x="422" y="134" width="14" height="14" fill="#1e88e5"/><text x="444" y="146">Nyanza — 268</text>
+        <rect x="422" y="158" width="14" height="14" fill="#90caf9"/><text x="444" y="170">Central — 255</text>
+      </g>
+      <text x="422" y="200" font-size="10" fill="#5b6b7b">Drill-down:</text>
+      <text x="422" y="216" font-size="10" fill="#0b4f9c" font-weight="bold">Region ▸ County ▸ District</text>
+    </svg>
+    <figcaption>Figure 10.2 — Geographic dashboard with regional coloring and GPS pins.</figcaption>
+  </figure>
   <div class="callout tip">💡 Split a Kobo GPS field (<code>"lat lng alt acc"</code>) by space in Power Query to get separate Latitude and Longitude columns.</div>
 
   <h3>10.3 Monitoring &amp; Evaluation (M&amp;E) Dashboard</h3>
@@ -685,7 +1024,35 @@ DIVIDE(
     [Program Target],
     0
 ) * 100</code></pre>
-  <div class="placeholder">🖼️ [Mockup 10.3] — M&amp;E dashboard with progress gauges.</div>
+  <figure>
+    <svg viewBox="0 0 620 270" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="620" height="270" rx="10" fill="#eef4fa"/>
+      <rect x="0" y="0" width="620" height="38" fill="#0a2540"/>
+      <text x="16" y="25" fill="#fff" font-size="15" font-weight="bold">Monitoring &amp; Evaluation Dashboard</text>
+      <!-- gauge -->
+      <rect x="16" y="52" width="190" height="200" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="111" y="74" text-anchor="middle" font-size="12" font-weight="bold" fill="#0a2540">Target Achievement</text>
+      <path d="M46,180 A65,65 0 0,1 176,180" fill="none" stroke="#e3eaf1" stroke-width="16"/>
+      <path d="M46,180 A65,65 0 0,1 165,140" fill="none" stroke="#27ae60" stroke-width="16"/>
+      <text x="111" y="172" text-anchor="middle" font-size="30" font-weight="bold" fill="#27ae60">78%</text>
+      <text x="111" y="210" text-anchor="middle" font-size="10" fill="#5b6b7b">of program target</text>
+      <!-- beneficiaries bar -->
+      <rect x="218" y="52" width="386" height="96" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="232" y="74" font-size="12" font-weight="bold" fill="#0a2540">Beneficiaries by Program</text>
+      <g font-size="9" fill="#1c2b3a">
+        <text x="232" y="96">Health</text><rect x="290" y="88" width="200" height="10" rx="3" fill="#1565c0"/>
+        <text x="232" y="116">Education</text><rect x="290" y="108" width="150" height="10" rx="3" fill="#1e88e5"/>
+        <text x="232" y="136">Agriculture</text><rect x="290" y="128" width="120" height="10" rx="3" fill="#90caf9"/>
+      </g>
+      <!-- progress tracker -->
+      <rect x="218" y="156" width="386" height="96" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="232" y="178" font-size="12" font-weight="bold" fill="#0a2540">Project Progress</text>
+      <rect x="232" y="190" width="358" height="16" rx="8" fill="#e3eaf1"/>
+      <rect x="232" y="190" width="270" height="16" rx="8" fill="#27ae60"/>
+      <text x="232" y="232" font-size="10" fill="#5b6b7b">6,240 of 8,000 beneficiaries reached</text>
+    </svg>
+    <figcaption>Figure 10.3 — M&amp;E dashboard with progress gauges and beneficiary tracking.</figcaption>
+  </figure>
 </section>
 
 <!-- ============ CH11 ============ -->
@@ -698,7 +1065,24 @@ DIVIDE(
   <p><strong>Publish</strong> your report to the <strong>Power BI Service</strong> (app.powerbi.com), where scheduled refresh lives.</p>
   <h3>11.2 Scheduled Refresh</h3>
   <p><strong>Dataset → Settings → Scheduled refresh</strong>. Set a frequency; Power BI re-runs the M query and pulls new submissions automatically.</p>
-  <div class="placeholder">🖼️ [Screenshot 11.1] — Scheduled refresh settings in Power BI Service.</div>
+  <figure>
+    <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="560" height="200" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <rect x="0" y="0" width="560" height="32" fill="#f2c811"/>
+      <text x="14" y="21" font-size="12" font-weight="bold" fill="#3a3a00">Power BI Service · Dataset Settings</text>
+      <text x="20" y="58" font-size="13" font-weight="bold" fill="#0a2540">Scheduled refresh</text>
+      <!-- toggle -->
+      <rect x="20" y="70" width="42" height="20" rx="10" fill="#27ae60"/><circle cx="52" cy="80" r="8" fill="#fff"/>
+      <text x="74" y="84" font-size="11" fill="#1c2b3a">On — keep your data up to date</text>
+      <text x="20" y="116" font-size="11" fill="#5b6b7b">Refresh frequency</text>
+      <rect x="20" y="124" width="160" height="26" rx="5" fill="#e9f2fb" stroke="#90caf9"/><text x="32" y="141" font-size="11" fill="#0a2540">Daily ▾</text>
+      <text x="210" y="116" font-size="11" fill="#5b6b7b">Time</text>
+      <rect x="210" y="124" width="120" height="26" rx="5" fill="#e9f2fb" stroke="#90caf9"/><text x="222" y="141" font-size="11" fill="#0a2540">06:00 AM</text>
+      <rect x="360" y="124" width="80" height="26" rx="5" fill="#1565c0"/><text x="400" y="141" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">+ Add time</text>
+      <text x="20" y="180" font-size="10" fill="#27ae60">✔ Last refresh succeeded · Next: tomorrow 06:00 AM</text>
+    </svg>
+    <figcaption>Figure 11.1 — Scheduled refresh settings in the Power BI Service.</figcaption>
+  </figure>
   <h3>11.3 API Refresh</h3>
   <p>Each refresh re-calls the <code>/data/</code> endpoint and gets the latest records — no manual export.</p>
   <h3>11.4 Gateway Requirements</h3>
