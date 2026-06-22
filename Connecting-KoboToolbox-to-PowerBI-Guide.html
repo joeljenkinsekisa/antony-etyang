@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connecting KoboToolbox to Power BI Using the New API — A Complete Modern Guide</title>
+<style>
+  :root{
+    --blue-900:#0a2540;
+    --blue-700:#0b4f9c;
+    --blue-600:#1565c0;
+    --blue-500:#1e88e5;
+    --blue-300:#90caf9;
+    --blue-50:#e9f2fb;
+    --ink:#1c2b3a;
+    --muted:#5b6b7b;
+    --line:#d6e3f0;
+    --white:#ffffff;
+    --soft:#f5f9fd;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--soft);
+    line-height:1.65;
+    font-size:16px;
+  }
+  .page{
+    max-width:900px;
+    margin:0 auto;
+    background:var(--white);
+    padding:64px 72px;
+    box-shadow:0 2px 18px rgba(10,37,64,.08);
+    border-top:6px solid var(--blue-600);
+  }
+
+  /* ---------- COVER ---------- */
+  .cover{
+    background:linear-gradient(160deg,var(--blue-900) 0%,var(--blue-700) 55%,var(--blue-500) 100%);
+    color:#fff;
+    text-align:center;
+    padding:90px 60px;
+    border-top:none;
+    border-radius:0;
+  }
+  .cover .kicker{
+    letter-spacing:3px;text-transform:uppercase;font-size:13px;
+    color:var(--blue-300);margin-bottom:18px;font-weight:600;
+  }
+  .cover h1{
+    font-size:40px;line-height:1.2;margin:0 0 18px;font-weight:800;
+  }
+  .cover .subtitle{
+    font-size:18px;color:#dbeaff;font-weight:400;max-width:640px;margin:0 auto 36px;
+  }
+  .cover .badge{
+    display:inline-block;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);
+    padding:8px 22px;border-radius:30px;font-size:14px;letter-spacing:1px;margin-bottom:48px;
+  }
+  .author-card{
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+    border-radius:14px;padding:30px 28px;max-width:520px;margin:0 auto;
+  }
+  .author-card .name{font-size:26px;font-weight:700;margin:0 0 4px;}
+  .author-card .role{color:var(--blue-300);font-size:14px;margin-bottom:18px;}
+  .author-card a{color:#fff;text-decoration:none;border-bottom:1px dotted rgba(255,255,255,.5);}
+  .author-card .links{font-size:14px;line-height:2;}
+  .cover .edition{margin-top:40px;font-size:13px;color:#cfe2ff;letter-spacing:1px;}
+
+  /* ---------- TYPOGRAPHY ---------- */
+  h2.chapter{
+    font-size:27px;color:var(--blue-700);margin:0 0 4px;font-weight:800;
+    padding-bottom:10px;border-bottom:3px solid var(--blue-500);
+  }
+  .chapter-tag{
+    display:inline-block;background:var(--blue-600);color:#fff;font-size:12px;
+    font-weight:700;letter-spacing:1px;padding:4px 12px;border-radius:5px;margin-bottom:14px;
+  }
+  h3{font-size:20px;color:var(--blue-900);margin:30px 0 10px;}
+  h4{font-size:16px;color:var(--blue-700);margin:22px 0 8px;text-transform:uppercase;letter-spacing:.5px;}
+  p{margin:10px 0;}
+  a{color:var(--blue-600);}
+  ul,ol{margin:10px 0 10px 22px;}
+  li{margin:5px 0;}
+
+  /* ---------- TABLES ---------- */
+  table{border-collapse:collapse;width:100%;margin:18px 0;font-size:14.5px;}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top;}
+  th{background:var(--blue-600);color:#fff;font-weight:600;}
+  tr:nth-child(even) td{background:var(--soft);}
+
+  /* ---------- TOC ---------- */
+  .toc table td:last-child{text-align:right;color:var(--muted);width:70px;}
+  .toc a{text-decoration:none;color:var(--ink);}
+  .toc a:hover{color:var(--blue-600);}
+
+  /* ---------- CODE ---------- */
+  pre{
+    background:var(--blue-900);color:#e8f1fb;border-radius:10px;padding:18px 20px;
+    overflow:auto;font-size:13px;line-height:1.55;border-left:4px solid var(--blue-500);
+    font-family:"Consolas","SF Mono",Menlo,monospace;
+  }
+  code{font-family:"Consolas","SF Mono",Menlo,monospace;}
+  p code,li code,td code{background:var(--blue-50);color:var(--blue-700);padding:1px 6px;border-radius:4px;font-size:13px;}
+  pre code{background:none;color:inherit;padding:0;}
+
+  /* diagrams as monospace blocks */
+  pre.diagram{background:var(--soft);color:var(--blue-900);border-left:4px solid var(--blue-300);}
+
+  /* ---------- CALLOUTS ---------- */
+  .callout{border-radius:10px;padding:14px 18px;margin:18px 0;font-size:15px;border-left:5px solid;}
+  .callout.tip{background:#eafaf1;border-color:#27ae60;}
+  .callout.note{background:var(--blue-50);border-color:var(--blue-500);}
+  .callout.warn{background:#fff4e5;border-color:#e67e22;}
+  .callout.key{background:#f3eafd;border-color:#8e44ad;}
+
+  .placeholder{
+    border:2px dashed var(--blue-300);background:var(--soft);color:var(--muted);
+    border-radius:10px;padding:16px;text-align:center;font-size:14px;font-style:italic;margin:18px 0;
+  }
+  /* ---------- FIGURES / SVG ILLUSTRATIONS ---------- */
+  figure{margin:22px 0;text-align:center;}
+  figure svg{max-width:100%;height:auto;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 2px 10px rgba(10,37,64,.07);}
+  figcaption{font-size:13px;color:var(--muted);margin-top:8px;font-style:italic;}
+
+  hr{border:none;border-top:1px solid var(--line);margin:34px 0;}
+
+  /* ---------- AUTHOR FOOTER ---------- */
+  .author-footer{text-align:center;background:var(--blue-50);border-radius:14px;padding:30px;margin-top:20px;}
+  .author-footer .name{font-size:22px;font-weight:700;color:var(--blue-700);}
+  .author-footer .role{color:var(--muted);font-size:14px;margin-bottom:10px;}
+  .copyright{text-align:center;color:var(--muted);font-size:13px;margin-top:20px;}
+
+  /* page counter for print */
+  @media print{
+    body{background:#fff;font-size:12px;}
+    .page{box-shadow:none;max-width:100%;padding:0 6mm;border-top:none;}
+    .cover{min-height:100vh;}
+    .page-break{page-break-before:always;}
+    pre{font-size:10px;}
+    a{color:var(--ink);text-decoration:none;}
+    @page{margin:18mm 14mm;}
+    @page{@bottom-center{content:"Page " counter(page);}}
+    .no-print{display:none;}
+  }
+  .print-bar{position:sticky;top:0;background:var(--blue-700);color:#fff;text-align:center;padding:10px;font-size:14px;z-index:10;}
+  .print-bar button{background:#fff;color:var(--blue-700);border:none;padding:6px 16px;border-radius:6px;font-weight:600;cursor:pointer;margin-left:10px;}
+</style>
+</head>
+<body>
+
+<div class="print-bar no-print">
+  📘 Connecting KoboToolbox to Power BI — A Complete Modern Guide
+  <button onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<!-- ============ COVER ============ -->
+<section class="page cover">
+  <div class="kicker">A Complete Modern Guide · Edition 2026</div>
+  <h1>Connecting KoboToolbox (Kobo Collect) to Power BI Using the New API</h1>
+  <p class="subtitle">A Modern Step-by-Step Guide for Data Analysts, Researchers, NGOs, and Monitoring &amp; Evaluation Professionals</p>
+  <div class="badge">FROM FIELD DATA TO LIVE DASHBOARDS</div>
+
+  <div class="author-card">
+    <div class="name">Joel Jenkins Ekisa</div>
+    <div class="role">Data &amp; Business Analyst · Power BI Developer · Data Operations Consultant</div>
+    <div class="links">
+      📧 <a href="mailto:joeljenkinsekisa@gmail.com">joeljenkinsekisa@gmail.com</a><br>
+      💻 <a href="https://github.com/joeljenkinsekisa">github.com/joeljenkinsekisa</a><br>
+      🌐 <a href="https://joeljenkinsekisa.github.io/JENKINS-EKISA-JOE-PORTFORLIO/">Portfolio</a><br>
+      🔗 LinkedIn: Joel Jenkins Ekisa
+    </div>
+  </div>
+  <div class="edition">For Training, Research, and Publication Purposes</div>
+</section>
+
+<!-- ============ TOC ============ -->
+<section class="page page-break toc">
+  <h2 class="chapter">Table of Contents</h2>
+  <table>
+    <tr><td>Cover Page</td><td>1</td></tr>
+    <tr><td>Table of Contents</td><td>2</td></tr>
+    <tr><td>1 · <a href="#ch1">Introduction to KoboToolbox</a></td><td>3</td></tr>
+    <tr><td>2 · <a href="#ch2">Understanding KoboToolbox Architecture</a></td><td>5</td></tr>
+    <tr><td>3 · <a href="#ch3">Understanding the New KoboToolbox API</a></td><td>7</td></tr>
+    <tr><td>4 · <a href="#ch4">Prerequisites</a></td><td>9</td></tr>
+    <tr><td>5 · <a href="#ch5">Obtaining the KoboToolbox API Token</a></td><td>11</td></tr>
+    <tr><td>6 · <a href="#ch6">Finding Your Form Asset ID</a></td><td>13</td></tr>
+    <tr><td>7 · <a href="#ch7">Understanding Kobo API Endpoints</a></td><td>15</td></tr>
+    <tr><td>8 · <a href="#ch8">Connecting KoboToolbox to Power BI Using the New API</a></td><td>17</td></tr>
+    <tr><td>9 · <a href="#ch9">Data Cleaning and Transformation</a></td><td>21</td></tr>
+    <tr><td>10 · <a href="#ch10">Building Power BI Dashboards</a></td><td>23</td></tr>
+    <tr><td>11 · <a href="#ch11">Automatic Refresh Strategies</a></td><td>26</td></tr>
+    <tr><td>12 · <a href="#ch12">Connecting to Other Visualization Tools</a></td><td>28</td></tr>
+    <tr><td>13 · <a href="#ch13">Common Errors and Troubleshooting</a></td><td>31</td></tr>
+    <tr><td>14 · <a href="#ch14">Security and Best Practices</a></td><td>33</td></tr>
+    <tr><td>15 · <a href="#ch15">Real-World Use Cases</a></td><td>35</td></tr>
+    <tr><td>16 · <a href="#ch16">Conclusion</a></td><td>38</td></tr>
+    <tr><td><a href="#glossary">Glossary of Technical Terms</a></td><td>39</td></tr>
+    <tr><td><a href="#references">References</a></td><td>40</td></tr>
+  </table>
+</section>
+
+<!-- ============ CH1 ============ -->
+<section class="page page-break" id="ch1">
+  <span class="chapter-tag">CHAPTER 1</span>
+  <h2 class="chapter">Introduction to KoboToolbox</h2>
+
+  <h3>1.1 What is KoboToolbox?</h3>
+  <p><strong>KoboToolbox</strong> is a free, open-source suite of tools designed for <strong>field data collection</strong>, especially in challenging and resource-limited environments. It lets organizations build digital forms (surveys, questionnaires, registration sheets, monitoring checklists), collect responses on mobile devices — even <strong>offline</strong> — and synchronize that data to a secure central server for analysis.</p>
+  <p>In simple terms: KoboToolbox replaces paper forms with smart, digital forms that can be filled on a phone or tablet and instantly turned into clean, analyzable data.</p>
+
+  <h3>1.2 History and Purpose</h3>
+  <p>KoboToolbox was developed by the <strong>Harvard Humanitarian Initiative (HHI)</strong> to support humanitarian and development workers operating in crisis zones where reliable internet and electricity are not guaranteed. Its core purpose remains to give frontline organizations a <strong>professional-grade, no-cost data collection platform</strong> that works anywhere. It has since grown into research, public health, agriculture, education, and government statistics.</p>
+
+  <h3>1.3 KoboToolbox vs Kobo Collect</h3>
+  <ul>
+    <li><strong>KoboToolbox</strong> → the <strong>web platform</strong> where you design forms, manage projects, store submissions, and export data.</li>
+    <li><strong>Kobo Collect</strong> → the <strong>Android mobile app</strong> field workers (enumerators) use to fill and submit forms, even without internet.</li>
+  </ul>
+  <div class="callout note">🧭 Think of it this way: KoboToolbox is the "headquarters" (the brain and warehouse), and Kobo Collect is the "field agent" (the data collector).</div>
+  <figure>
+    <svg viewBox="0 0 620 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <defs><marker id="arrowHQ" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#27ae60"/></marker></defs>
+      <!-- Kobo Collect card -->
+      <rect x="20" y="30" width="250" height="140" rx="12" fill="#e9f2fb" stroke="#1565c0" stroke-width="2"/>
+      <text x="145" y="58" text-anchor="middle" font-size="14" font-weight="bold" fill="#0a2540">📱 KOBO COLLECT</text>
+      <text x="145" y="76" text-anchor="middle" font-size="10" fill="#5b6b7b">Mobile App / Field — the "Field Agent"</text>
+      <g font-size="11" fill="#1c2b3a">
+        <text x="44" y="104">• Fill forms offline</text>
+        <text x="44" y="126">• Capture GPS, photos</text>
+        <text x="44" y="148">• Submit when online</text>
+      </g>
+      <!-- arrow -->
+      <line x1="272" y1="100" x2="346" y2="100" stroke="#27ae60" stroke-width="3" marker-end="url(#arrowHQ)"/>
+      <text x="309" y="92" text-anchor="middle" font-size="9" fill="#27ae60" font-weight="bold">Sync data</text>
+      <!-- KoboToolbox card -->
+      <rect x="350" y="30" width="250" height="140" rx="12" fill="#0a2540"/>
+      <text x="475" y="58" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">☁️ KOBOTOOLBOX</text>
+      <text x="475" y="76" text-anchor="middle" font-size="10" fill="#90caf9">Web Server / HQ — the "Headquarters"</text>
+      <g font-size="11" fill="#e8f1fb">
+        <text x="374" y="104">• Design forms</text>
+        <text x="374" y="126">• Store submissions</text>
+        <text x="374" y="148">• Export &amp; API access</text>
+      </g>
+    </svg>
+    <figcaption>Figure 1.0 — Kobo Collect (the field agent) syncs data to KoboToolbox (the headquarters).</figcaption>
+  </figure>
+
+  <h3>1.4 Why Organizations Use KoboToolbox</h3>
+  <ul>
+    <li>✅ Free and open-source — no licensing fees</li>
+    <li>✅ Works offline — ideal for remote/rural fieldwork</li>
+    <li>✅ Multi-device — Android phones, tablets, web browsers</li>
+    <li>✅ Rich question types — GPS, photos, barcodes, skip logic, validation</li>
+    <li>✅ Secure central storage and multiple export formats, including <strong>API access</strong></li>
+  </ul>
+
+  <h3>1.5 Advantages of Digital Data Collection</h3>
+  <table>
+    <tr><th>Paper-Based Collection</th><th>Digital Collection (KoboToolbox)</th></tr>
+    <tr><td>Manual data entry (slow, error-prone)</td><td>Automatic capture, no re-typing</td></tr>
+    <tr><td>Easily lost or damaged</td><td>Securely stored on a server</td></tr>
+    <tr><td>No validation — bad data accepted</td><td>Built-in validation &amp; skip logic</td></tr>
+    <tr><td>No GPS, photos, or timestamps</td><td>Captures GPS, photos, audio, time</td></tr>
+    <tr><td>Expensive printing &amp; transport</td><td>Zero printing cost</td></tr>
+    <tr><td>Slow reporting (weeks)</td><td>Near real-time reporting</td></tr>
+  </table>
+
+  <h3>1.6 Common Users</h3>
+  <ul>
+    <li>🏥 <strong>NGOs</strong> — beneficiary registration, needs assessments, M&amp;E</li>
+    <li>🏛️ <strong>Government Agencies</strong> — census, public health, agriculture</li>
+    <li>🔬 <strong>Researchers</strong> — household surveys, clinical studies</li>
+    <li>🎓 <strong>Universities</strong> — academic studies, field projects</li>
+    <li>🌍 <strong>Humanitarian Organizations</strong> — rapid assessments, refugee tracking</li>
+  </ul>
+
+  <h3>1.7 Illustrations</h3>
+  <figure>
+    <svg viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <!-- Phone: Kobo Collect -->
+      <rect x="40" y="20" width="180" height="280" rx="22" fill="#0a2540"/>
+      <rect x="52" y="46" width="156" height="228" rx="6" fill="#ffffff"/>
+      <rect x="52" y="46" width="156" height="34" fill="#1565c0"/>
+      <text x="64" y="68" fill="#fff" font-size="13" font-weight="bold">Kobo Collect</text>
+      <circle cx="130" cy="288" r="9" fill="#2b3f54"/>
+      <!-- form fields -->
+      <text x="64" y="104" fill="#0a2540" font-size="10" font-weight="bold">Household Survey 2026</text>
+      <text x="64" y="126" fill="#5b6b7b" font-size="9">Respondent name</text>
+      <rect x="64" y="132" width="132" height="16" rx="3" fill="#e9f2fb" stroke="#90caf9"/>
+      <text x="64" y="166" fill="#5b6b7b" font-size="9">Region</text>
+      <rect x="64" y="172" width="132" height="16" rx="3" fill="#e9f2fb" stroke="#90caf9"/>
+      <text x="64" y="206" fill="#5b6b7b" font-size="9">Household size</text>
+      <rect x="64" y="212" width="60" height="16" rx="3" fill="#e9f2fb" stroke="#90caf9"/>
+      <rect x="64" y="244" width="132" height="22" rx="5" fill="#27ae60"/>
+      <text x="92" y="259" fill="#fff" font-size="10" font-weight="bold">Submit ▶</text>
+      <!-- Web platform -->
+      <rect x="270" y="40" width="340" height="240" rx="10" fill="#0a2540"/>
+      <rect x="282" y="64" width="316" height="204" rx="4" fill="#f5f9fd"/>
+      <rect x="282" y="64" width="316" height="28" fill="#1565c0"/>
+      <circle cx="298" cy="78" r="4" fill="#ff5f57"/><circle cx="312" cy="78" r="4" fill="#febc2e"/><circle cx="326" cy="78" r="4" fill="#28c840"/>
+      <text x="360" y="82" fill="#fff" font-size="11" font-weight="bold">KoboToolbox — Projects</text>
+      <!-- project rows -->
+      <g font-size="10" fill="#1c2b3a">
+        <rect x="296" y="104" width="288" height="34" rx="4" fill="#fff" stroke="#d6e3f0"/>
+        <text x="306" y="118" font-weight="bold">Household Survey 2026</text><text x="306" y="131" fill="#5b6b7b" font-size="9">Deployed</text>
+        <rect x="520" y="110" width="54" height="22" rx="4" fill="#e9f2fb"/><text x="528" y="125" fill="#0b4f9c" font-weight="bold">1,248</text>
+        <rect x="296" y="146" width="288" height="34" rx="4" fill="#fff" stroke="#d6e3f0"/>
+        <text x="306" y="160" font-weight="bold">Clinic Visits</text><text x="306" y="173" fill="#5b6b7b" font-size="9">Deployed</text>
+        <rect x="520" y="152" width="54" height="22" rx="4" fill="#e9f2fb"/><text x="528" y="167" fill="#0b4f9c" font-weight="bold">863</text>
+        <rect x="296" y="188" width="288" height="34" rx="4" fill="#fff" stroke="#d6e3f0"/>
+        <text x="306" y="202" font-weight="bold">Farmer Registration</text><text x="306" y="215" fill="#5b6b7b" font-size="9">Deployed</text>
+        <rect x="520" y="194" width="54" height="22" rx="4" fill="#e9f2fb"/><text x="528" y="209" fill="#0b4f9c" font-weight="bold">540</text>
+      </g>
+      <text x="296" y="248" fill="#5b6b7b" font-size="9">Submissions update in real time as enumerators sync</text>
+    </svg>
+    <figcaption>Figure 1.1 — Kobo Collect mobile app (left) and the KoboToolbox web platform showing projects and live submission counts (right).</figcaption>
+  </figure>
+  <figure>
+    <svg viewBox="0 0 760 150" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <defs><marker id="arrow1" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#1565c0"/></marker></defs>
+      <g text-anchor="middle">
+        <rect x="20"  y="45" width="120" height="60" rx="10" fill="#e9f2fb" stroke="#1565c0" stroke-width="2"/>
+        <text x="80"  y="72" font-size="20">📝</text><text x="80" y="95" font-size="11" font-weight="bold" fill="#0a2540">Design Form</text>
+        <rect x="180" y="45" width="120" height="60" rx="10" fill="#e9f2fb" stroke="#1565c0" stroke-width="2"/>
+        <text x="240" y="72" font-size="20">📱</text><text x="240" y="95" font-size="11" font-weight="bold" fill="#0a2540">Collect (Mobile)</text>
+        <rect x="340" y="45" width="120" height="60" rx="10" fill="#e9f2fb" stroke="#1565c0" stroke-width="2"/>
+        <text x="400" y="72" font-size="20">☁️</text><text x="400" y="95" font-size="11" font-weight="bold" fill="#0a2540">Kobo Server</text>
+        <rect x="500" y="45" width="120" height="60" rx="10" fill="#dff5e6" stroke="#27ae60" stroke-width="2"/>
+        <text x="560" y="72" font-size="20">🔗</text><text x="560" y="95" font-size="11" font-weight="bold" fill="#0a2540">API</text>
+        <rect x="640" y="45" width="100" height="60" rx="10" fill="#fff4e5" stroke="#e67e22" stroke-width="2"/>
+        <text x="690" y="72" font-size="20">📊</text><text x="690" y="95" font-size="11" font-weight="bold" fill="#0a2540">Power BI</text>
+      </g>
+      <g stroke="#1565c0" stroke-width="2" marker-end="url(#arrow1)">
+        <line x1="142" y1="75" x2="176" y2="75"/><line x1="302" y1="75" x2="336" y2="75"/>
+        <line x1="462" y1="75" x2="496" y2="75"/><line x1="622" y1="75" x2="636" y2="75"/>
+      </g>
+      <text x="319" y="40" font-size="9" fill="#5b6b7b" text-anchor="middle">sync</text>
+      <text x="630" y="40" font-size="9" fill="#5b6b7b" text-anchor="middle">JSON</text>
+    </svg>
+    <figcaption>Figure 1.2 — The complete data-collection workflow, from form design to a live Power BI dashboard.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ CH2 ============ -->
+<section class="page page-break" id="ch2">
+  <span class="chapter-tag">CHAPTER 2</span>
+  <h2 class="chapter">Understanding KoboToolbox Architecture</h2>
+  <p>To connect KoboToolbox to Power BI, you must first understand how its parts fit together — from a field response to a polished dashboard.</p>
+
+  <h3>2.1 Core Components</h3>
+  <h4>Kobo Collect App</h4>
+  <p>The Android application on enumerators' devices. It downloads blank forms, allows offline entry, and uploads completed submissions when connectivity returns.</p>
+  <h4>KoboToolbox Server</h4>
+  <p>The central web server (e.g., <code>kf.kobotoolbox.org</code>) that hosts your account, stores all forms and submissions, and exposes the <strong>API</strong>. This is the single source of truth.</p>
+  <h4>Forms</h4>
+  <p>A <strong>form</strong> (also called an <strong>asset</strong>) is the digital questionnaire you design. Each has a unique <strong>Asset ID (UID)</strong> used to fetch its data via the API.</p>
+  <h4>Submissions</h4>
+  <p>A <strong>submission</strong> is one completed record. 500 households surveyed = 500 submissions. Each is stored as a structured <strong>JSON</strong> record.</p>
+  <h4>API Layer</h4>
+  <p>The <strong>API</strong> is a secure "doorway" that lets external software (like Power BI) request data directly from the server, without manual exporting. This is the heart of this guide.</p>
+  <h4>Data Export Services</h4>
+  <p>Traditional exports (Excel, CSV, SPSS, GeoJSON) are useful for one-off downloads but are <strong>manual</strong>. The API replaces them with <strong>automation</strong>.</p>
+
+  <h3>2.2 End-to-End Architecture</h3>
+  <figure>
+    <svg viewBox="0 0 780 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <defs><marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0b4f9c"/></marker></defs>
+      <g text-anchor="middle">
+        <rect x="10"  y="50" width="130" height="70" rx="10" fill="#0a2540"/>
+        <text x="75" y="78" font-size="22">📱</text><text x="75" y="100" font-size="11" font-weight="bold" fill="#fff">MOBILE DEVICE</text><text x="75" y="114" font-size="8" fill="#90caf9">Kobo Collect</text>
+        <rect x="170" y="50" width="130" height="70" rx="10" fill="#0b4f9c"/>
+        <text x="235" y="78" font-size="22">🗄️</text><text x="235" y="100" font-size="11" font-weight="bold" fill="#fff">KOBO SERVER</text><text x="235" y="114" font-size="8" fill="#90caf9">Storage DB</text>
+        <rect x="330" y="50" width="130" height="70" rx="10" fill="#1565c0"/>
+        <text x="395" y="78" font-size="22">🔗</text><text x="395" y="100" font-size="11" font-weight="bold" fill="#fff">API LAYER</text><text x="395" y="114" font-size="8" fill="#cfe2ff">REST + Token</text>
+        <rect x="490" y="50" width="130" height="70" rx="10" fill="#1e88e5"/>
+        <text x="555" y="78" font-size="22">⚙️</text><text x="555" y="100" font-size="11" font-weight="bold" fill="#fff">POWER BI</text><text x="555" y="114" font-size="8" fill="#e9f2fb">Power Query</text>
+        <rect x="650" y="50" width="120" height="70" rx="10" fill="#27ae60"/>
+        <text x="710" y="78" font-size="22">📊</text><text x="710" y="100" font-size="11" font-weight="bold" fill="#fff">DASHBOARD</text><text x="710" y="114" font-size="8" fill="#dff5e6">Reports</text>
+      </g>
+      <g stroke="#0b4f9c" stroke-width="2.5" marker-end="url(#arrow2)">
+        <line x1="140" y1="85" x2="166" y2="85"/><line x1="300" y1="85" x2="326" y2="85"/>
+        <line x1="460" y1="85" x2="486" y2="85"/><line x1="620" y1="85" x2="646" y2="85"/>
+      </g>
+      <g text-anchor="middle" font-size="9" fill="#5b6b7b">
+        <text x="75" y="145">Field worker</text><text x="75" y="158">submits data</text>
+        <text x="235" y="145">Central store</text><text x="235" y="158">of submissions</text>
+        <text x="395" y="145">Secure access</text><text x="395" y="158">via token auth</text>
+        <text x="555" y="145">Transform</text><text x="555" y="158">&amp; model</text>
+        <text x="710" y="145">Decision-</text><text x="710" y="158">making insights</text>
+      </g>
+    </svg>
+    <figcaption>Figure 2.1 — End-to-end KoboToolbox → Power BI architecture (branded blue/white styling).</figcaption>
+  </figure>
+
+  <h3>2.3 How Data Flows</h3>
+  <ol>
+    <li>An <strong>enumerator</strong> fills a form in <strong>Kobo Collect</strong> and submits it.</li>
+    <li>The submission travels to the <strong>Kobo Server</strong> and is stored as JSON.</li>
+    <li><strong>Power BI</strong> sends an authenticated request to the <strong>API Layer</strong>.</li>
+    <li>The API returns the submissions as structured data.</li>
+    <li>Power BI <strong>cleans, models, and visualizes</strong> the data into a <strong>dashboard</strong>.</li>
+  </ol>
+</section>
+
+<!-- ============ CH3 ============ -->
+<section class="page page-break" id="ch3">
+  <span class="chapter-tag">CHAPTER 3</span>
+  <h2 class="chapter">Understanding the New KoboToolbox API</h2>
+
+  <h3>3.1 What Changed?</h3>
+  <p>For years, getting Kobo data into a reporting tool meant <strong>manual work</strong>: log in, export, download Excel, refresh manually, repeat — every day. The <strong>new API approach</strong> removes this pain.</p>
+
+  <h4>Old Method (Legacy)</h4>
+  <ul>
+    <li>📥 Manual Excel exports — download a new file every time data changes</li>
+    <li>📄 CSV downloads — repetitive and error-prone</li>
+    <li>🕸️ Legacy API (v1) — older, less consistent endpoints</li>
+    <li>❌ No automation; data is stale the moment it is downloaded</li>
+  </ul>
+  <h4>New Method (Modern REST API v2)</h4>
+  <ul>
+    <li>🔗 REST API (v2) — clean, predictable, well-documented endpoints</li>
+    <li>🔑 Token-based authentication — secure, no password sharing</li>
+    <li>🔄 Automated refresh — Power BI pulls fresh data on a schedule</li>
+    <li>⚡ Real-time integration with native JSON responses</li>
+  </ul>
+
+  <h3>3.2 Old vs New — At a Glance</h3>
+  <table>
+    <tr><th>Feature</th><th>Old Method</th><th>New API (v2)</th></tr>
+    <tr><td>Data retrieval</td><td>Manual export</td><td>Automated request</td></tr>
+    <tr><td>Authentication</td><td>Login each time</td><td>One-time token</td></tr>
+    <tr><td>Freshness</td><td>Stale</td><td>Near real-time</td></tr>
+    <tr><td>Effort</td><td>High (daily)</td><td>Set once, runs itself</td></tr>
+    <tr><td>Error risk</td><td>High</td><td>Low</td></tr>
+    <tr><td>Scalability</td><td>Poor</td><td>Excellent</td></tr>
+  </table>
+
+  <h3>3.3 Why Move to the New API</h3>
+  <ol>
+    <li><strong>Save time</strong> — eliminate daily manual exports.</li>
+    <li><strong>Reduce errors</strong> — no copy-paste mistakes.</li>
+    <li><strong>Always current</strong> — leadership sees live numbers.</li>
+    <li><strong>Secure</strong> — tokens can be revoked without changing passwords.</li>
+    <li><strong>Scalable</strong> — works for 50 or 50,000 submissions.</li>
+  </ol>
+  <div class="callout key">💡 Key takeaway: The new API turns reporting from a <em>daily chore</em> into an <em>automatic, always-on service</em>.</div>
+</section>
+
+<!-- ============ CH4 ============ -->
+<section class="page page-break" id="ch4">
+  <span class="chapter-tag">CHAPTER 4</span>
+  <h2 class="chapter">Prerequisites</h2>
+  <p>Before connecting KoboToolbox to Power BI, make sure you have everything below ready. This checklist prevents most common setup problems.</p>
+  <h3>4.1 Checklist</h3>
+  <table>
+    <tr><th>#</th><th>Requirement</th><th>Why You Need It</th></tr>
+    <tr><td>1</td><td>KoboToolbox account</td><td>To own forms and access the API</td></tr>
+    <tr><td>2</td><td>A published (deployed) form</td><td>The API only returns data from deployed forms</td></tr>
+    <tr><td>3</td><td>Form submissions</td><td>You need at least one record to retrieve</td></tr>
+    <tr><td>4</td><td>API Token</td><td>Secure key that authorizes Power BI</td></tr>
+    <tr><td>5</td><td>Power BI Desktop</td><td>Connects, models, and visualizes</td></tr>
+    <tr><td>6</td><td>Stable internet connection</td><td>API requests travel over the internet</td></tr>
+  </table>
+
+  <h3>4.2 Notes on Each Prerequisite</h3>
+  <p><strong>Account</strong> — Sign up free at <a href="https://kf.kobotoolbox.org">kf.kobotoolbox.org</a> (global) or <a href="https://eu.kobotoolbox.org">eu.kobotoolbox.org</a> (EU). ⚠️ Remember which server you use — the API URL depends on it.</p>
+  <p><strong>Published form</strong> — After building a form, click <strong>Deploy</strong>. A <em>Draft</em> form has no data endpoint.</p>
+  <p><strong>Submissions</strong> — Collect a few test records via Kobo Collect or the web "Enketo" form.</p>
+  <p><strong>API Token</strong> — Covered step-by-step in Chapter 5.</p>
+  <p><strong>Power BI Desktop</strong> — Download free from <a href="https://powerbi.microsoft.com">powerbi.microsoft.com</a> (Windows only).</p>
+  <p><strong>Internet</strong> — Required during refresh. Field collection in Kobo Collect remains offline-capable.</p>
+  <figure>
+    <svg viewBox="0 0 620 220" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="10" y="10" width="600" height="200" rx="10" fill="#f5f9fd" stroke="#d6e3f0"/>
+      <rect x="10" y="10" width="600" height="40" rx="10" fill="#1565c0"/>
+      <text x="28" y="36" fill="#fff" font-size="14" font-weight="bold">KoboToolbox · Household Survey 2026</text>
+      <!-- status badge -->
+      <rect x="28" y="70" width="120" height="30" rx="15" fill="#dff5e6" stroke="#27ae60"/>
+      <circle cx="46" cy="85" r="5" fill="#27ae60"/>
+      <text x="58" y="90" fill="#1e7a3d" font-size="12" font-weight="bold">Deployed</text>
+      <!-- summary tiles -->
+      <g>
+        <rect x="28"  y="120" width="170" height="74" rx="8" fill="#fff" stroke="#d6e3f0"/>
+        <text x="113" y="150" text-anchor="middle" font-size="26" font-weight="bold" fill="#0b4f9c">1,248</text>
+        <text x="113" y="172" text-anchor="middle" font-size="11" fill="#5b6b7b">Submissions</text>
+        <rect x="222" y="120" width="170" height="74" rx="8" fill="#fff" stroke="#d6e3f0"/>
+        <text x="307" y="150" text-anchor="middle" font-size="26" font-weight="bold" fill="#0b4f9c">42</text>
+        <text x="307" y="172" text-anchor="middle" font-size="11" fill="#5b6b7b">Questions</text>
+        <rect x="416" y="120" width="170" height="74" rx="8" fill="#fff" stroke="#d6e3f0"/>
+        <text x="501" y="150" text-anchor="middle" font-size="26" font-weight="bold" fill="#0b4f9c">12</text>
+        <text x="501" y="172" text-anchor="middle" font-size="11" fill="#5b6b7b">Enumerators</text>
+      </g>
+    </svg>
+    <figcaption>Figure 4.1 — A deployed form showing "Deployed" status and a submission count greater than zero.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ CH5 ============ -->
+<section class="page page-break" id="ch5">
+  <span class="chapter-tag">CHAPTER 5</span>
+  <h2 class="chapter">Obtaining the KoboToolbox API Token</h2>
+  <p>Your <strong>API Token</strong> is a secret key — like a password — that lets Power BI prove it is allowed to access your data. <strong>Never share it publicly.</strong></p>
+
+  <h3>Step 1 — Log in to KoboToolbox</h3>
+  <p>Go to your server: <code>https://kf.kobotoolbox.org</code> (or <code>eu.kobotoolbox.org</code>). Enter your username and password.</p>
+  <figure>
+    <svg viewBox="0 0 420 230" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="420" height="230" rx="10" fill="#0a2540"/>
+      <rect x="120" y="30" width="180" height="170" rx="10" fill="#fff"/>
+      <text x="210" y="60" text-anchor="middle" font-size="14" font-weight="bold" fill="#1565c0">KoboToolbox</text>
+      <text x="138" y="88" font-size="9" fill="#5b6b7b">Username</text>
+      <rect x="138" y="94" width="144" height="22" rx="4" fill="#e9f2fb" stroke="#90caf9"/>
+      <text x="138" y="132" font-size="9" fill="#5b6b7b">Password</text>
+      <rect x="138" y="138" width="144" height="22" rx="4" fill="#e9f2fb" stroke="#90caf9"/>
+      <rect x="138" y="170" width="144" height="24" rx="5" fill="#1565c0"/>
+      <text x="210" y="186" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">Log in ▶</text>
+    </svg>
+    <figcaption>Figure 5.1 — KoboToolbox login page.</figcaption>
+  </figure>
+
+  <h3>Step 2 — Open Account Settings</h3>
+  <p>Click your <strong>account icon / name</strong> (top-right), then <strong>Account Settings</strong>.</p>
+  <figure>
+    <svg viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="420" height="40" fill="#1565c0"/>
+      <text x="16" y="26" fill="#fff" font-size="13" font-weight="bold">KoboToolbox</text>
+      <circle cx="392" cy="20" r="12" fill="#0a2540"/><text x="392" y="25" text-anchor="middle" fill="#fff" font-size="11">JE</text>
+      <!-- dropdown -->
+      <rect x="280" y="40" width="130" height="120" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="296" y="66" font-size="11" fill="#1c2b3a">My Profile</text>
+      <rect x="284" y="78" width="122" height="26" rx="5" fill="#e9f2fb"/>
+      <text x="296" y="95" font-size="11" font-weight="bold" fill="#0b4f9c">Account Settings ◀</text>
+      <text x="296" y="124" font-size="11" fill="#1c2b3a">Language</text>
+      <text x="296" y="148" font-size="11" fill="#c0392b">Log out</text>
+    </svg>
+    <figcaption>Figure 5.2 — Account menu highlighting "Account Settings".</figcaption>
+  </figure>
+
+  <h3>Step 3 — Navigate to API Access</h3>
+  <p>In the settings sidebar, find the <strong>Security</strong> section (or scroll to <strong>API Access</strong>) where your token is shown.</p>
+  <figure>
+    <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="560" height="200" rx="10" fill="#f5f9fd" stroke="#d6e3f0"/>
+      <!-- sidebar -->
+      <rect x="0" y="0" width="150" height="200" rx="10" fill="#0a2540"/>
+      <text x="20" y="40" fill="#90caf9" font-size="11">Profile</text>
+      <text x="20" y="70" fill="#90caf9" font-size="11">Account</text>
+      <rect x="0" y="86" width="150" height="26" fill="#1565c0"/>
+      <text x="20" y="103" fill="#fff" font-size="11" font-weight="bold">Security</text>
+      <text x="20" y="134" fill="#90caf9" font-size="11">Notifications</text>
+      <!-- content -->
+      <text x="176" y="40" font-size="14" font-weight="bold" fill="#0a2540">API Access</text>
+      <text x="176" y="66" font-size="10" fill="#5b6b7b">Your secret token authorizes external apps (Power BI).</text>
+      <rect x="176" y="84" width="300" height="28" rx="5" fill="#e9f2fb" stroke="#90caf9"/>
+      <text x="186" y="102" font-size="11" fill="#5b6b7b" font-family="monospace">•••••••••••••••••• (hidden)</text>
+      <rect x="486" y="84" width="58" height="28" rx="5" fill="#1565c0"/>
+      <text x="515" y="102" text-anchor="middle" font-size="10" font-weight="bold" fill="#fff">Show</text>
+    </svg>
+    <figcaption>Figure 5.3 — Security settings page showing the API token area.</figcaption>
+  </figure>
+
+  <h3>Step 4 — Generate / Reveal the Token</h3>
+  <p>Click <strong>Show</strong> (or <strong>Generate</strong>). It is a long string, for example:</p>
+  <pre><code>9a8b7c6d5e4f3g2h1i0j_EXAMPLE_TOKEN_abcdef123456</code></pre>
+  <figure>
+    <svg viewBox="0 0 560 110" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="560" height="110" rx="10" fill="#f5f9fd" stroke="#d6e3f0"/>
+      <text x="20" y="34" font-size="12" font-weight="bold" fill="#0a2540">Your API Token</text>
+      <rect x="20" y="46" width="430" height="30" rx="5" fill="#0a2540"/>
+      <text x="34" y="66" font-size="12" fill="#9ad08f" font-family="monospace">9a8b7c6d5e4f••••••••••EXAMPLE••••••abcdef123456</text>
+      <rect x="460" y="46" width="80" height="30" rx="5" fill="#27ae60"/>
+      <text x="500" y="66" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">⧉ Copy</text>
+      <text x="20" y="96" font-size="9" fill="#c0392b">⚠ Keep this secret — anyone with the token can read your data.</text>
+    </svg>
+    <figcaption>Figure 5.4 — Revealed API token (partially masked for privacy) with a Copy button.</figcaption>
+  </figure>
+
+  <h3>Step 5 — Copy and Securely Store</h3>
+  <ul>
+    <li>Click the <strong>copy</strong> icon.</li>
+    <li>Paste it into a <strong>secure password manager</strong> — not a public document or shared chat.</li>
+    <li>⚠️ Treat it like a password. Anyone with this token can read your data.</li>
+  </ul>
+
+  <h3>5.2 Quick Way to Find Your Token</h3>
+  <p>While logged in, visit:</p>
+  <pre><code>https://kf.kobotoolbox.org/token/?format=json</code></pre>
+  <p>It returns:</p>
+  <pre><code>{ "token": "9a8b7c6d5e4f3g2h1i0j_EXAMPLE_TOKEN_abcdef123456" }</code></pre>
+  <div class="callout warn">🔐 Security tip: If a token is ever exposed, log in and <strong>regenerate</strong> it immediately. The old one stops working instantly.</div>
+</section>
+
+<!-- ============ CH6 ============ -->
+<section class="page page-break" id="ch6">
+  <span class="chapter-tag">CHAPTER 6</span>
+  <h2 class="chapter">Finding Your Form Asset ID</h2>
+
+  <h3>6.1 What is an Asset ID?</h3>
+  <p>Every form (asset) has a unique identifier called the <strong>Asset ID</strong> or <strong>Asset UID</strong>. It tells the API <em>which form's data</em> you want. Without the correct Asset ID, the API cannot return your submissions.</p>
+
+  <h3>6.2 Why It Is Important</h3>
+  <ul>
+    <li>It uniquely identifies <strong>one specific form</strong>.</li>
+    <li>It is required in <strong>every data API request</strong>.</li>
+    <li>Using the wrong ID returns <em>no data</em> or an <em>error</em>.</li>
+  </ul>
+
+  <h3>6.3 How to Locate It</h3>
+  <h4>Method 1 — From the Form URL (Easiest)</h4>
+  <p>Open your form and look at the address bar:</p>
+  <pre><code>https://kf.kobotoolbox.org/#/forms/aBcDeFg123456</code></pre>
+  <p>The portion after <code>/forms/</code> is your <strong>Asset ID</strong>: <code>aBcDeFg123456</code></p>
+  <figure>
+    <svg viewBox="0 0 620 90" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="620" height="90" rx="10" fill="#e9eef3"/>
+      <circle cx="24" cy="24" r="6" fill="#ff5f57"/><circle cx="44" cy="24" r="6" fill="#febc2e"/><circle cx="64" cy="24" r="6" fill="#28c840"/>
+      <rect x="90" y="12" width="510" height="26" rx="13" fill="#fff" stroke="#c7d2dc"/>
+      <text x="104" y="30" font-size="12" font-family="monospace" fill="#5b6b7b">🔒 https://kf.kobotoolbox.org/#/forms/</text>
+      <rect x="392" y="14" width="120" height="22" rx="4" fill="#fff3c4" stroke="#e0b400"/>
+      <text x="402" y="30" font-size="12" font-family="monospace" font-weight="bold" fill="#0a2540">aBcDeFg123456</text>
+      <text x="90" y="66" font-size="11" fill="#0b4f9c">▲ The highlighted portion after <tspan font-family="monospace" font-weight="bold">/forms/</tspan> is your Asset ID.</text>
+    </svg>
+    <figcaption>Figure 6.1 — Browser address bar with the Asset ID portion highlighted.</figcaption>
+  </figure>
+
+  <h4>Method 2 — From the Assets API</h4>
+  <p>Visit <code>https://kf.kobotoolbox.org/api/v2/assets/?format=json</code> and copy your form's <code>uid</code>:</p>
+  <pre><code>{
+  "results": [
+    {
+      "uid": "aBcDeFg123456",
+      "name": "Household Survey 2026",
+      "asset_type": "survey"
+    }
+  ]
+}</code></pre>
+  <div class="callout tip">💡 Tip: A real Asset ID always starts with <strong>a</strong> followed by a mix of letters and numbers, e.g., <code>aXY12zPQ98765</code>.</div>
+</section>
+
+<!-- ============ CH7 ============ -->
+<section class="page page-break" id="ch7">
+  <span class="chapter-tag">CHAPTER 7</span>
+  <h2 class="chapter">Understanding Kobo API Endpoints</h2>
+  <p>An <strong>endpoint</strong> is simply a web address (URL) that returns a specific type of data.</p>
+
+  <h3>7.1 Base URL</h3>
+  <pre><code>https://kf.kobotoolbox.org/api/v2/</code></pre>
+  <p>(EU server: <code>https://eu.kobotoolbox.org/api/v2/</code>.)</p>
+
+  <h3>7.2 Key Endpoints</h3>
+  <h4>🔹 Assets — list all your forms</h4>
+  <pre><code>/api/v2/assets/</code></pre>
+  <p><strong>Purpose:</strong> Lists all forms with names and UIDs. Use to discover your Asset ID.</p>
+  <h4>🔹 Submissions (Data) — the actual records</h4>
+  <pre><code>/api/v2/assets/{asset_uid}/data/</code></pre>
+  <p><strong>Purpose:</strong> Returns <strong>all submissions</strong>. <em>This is the endpoint Power BI uses most.</em></p>
+  <h4>🔹 Metadata — details about one form</h4>
+  <pre><code>/api/v2/assets/{asset_uid}</code></pre>
+  <p><strong>Purpose:</strong> Returns information <em>about</em> a single form — questions, structure, status — but not the responses.</p>
+
+  <h3>7.3 Putting It Together</h3>
+  <pre><code>https://kf.kobotoolbox.org/api/v2/assets/aBcDeFg123456/data/?format=json</code></pre>
+  <table>
+    <tr><th>Endpoint</th><th>Returns</th><th>Typical Use</th></tr>
+    <tr><td><code>/assets/</code></td><td>List of all forms</td><td>Find your Asset ID</td></tr>
+    <tr><td><code>/assets/{uid}</code></td><td>One form's metadata</td><td>Check structure / status</td></tr>
+    <tr><td><code>/assets/{uid}/data/</code></td><td>All submissions</td><td><strong>Power BI reporting</strong></td></tr>
+  </table>
+  <div class="callout tip">💡 Always append <code>?format=json</code> so the API returns clean JSON that Power BI parses easily.</div>
+</section>
+
+<!-- ============ CH8 ============ -->
+<section class="page page-break" id="ch8">
+  <span class="chapter-tag">CHAPTER 8</span>
+  <h2 class="chapter">Connecting KoboToolbox to Power BI Using the New API</h2>
+  <p>This is the core chapter. By the end you will have live Kobo data inside Power BI.</p>
+
+  <h3>Step 1 — Open Power BI Desktop</h3>
+  <p>Launch <strong>Power BI Desktop</strong> and close the splash screen.</p>
+  <figure>
+    <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="600" height="200" rx="8" fill="#f5f9fd" stroke="#d6e3f0"/>
+      <rect x="0" y="0" width="600" height="34" fill="#f2c811"/>
+      <text x="16" y="23" font-size="13" font-weight="bold" fill="#3a3a00">⬛ Power BI Desktop</text>
+      <rect x="0" y="34" width="600" height="30" fill="#fff" stroke="#e0e6ec"/>
+      <text x="16" y="54" font-size="11" fill="#1c2b3a" font-weight="bold">Home</text><text x="70" y="54" font-size="11" fill="#5b6b7b">Insert</text><text x="130" y="54" font-size="11" fill="#5b6b7b">Modeling</text><text x="210" y="54" font-size="11" fill="#5b6b7b">View</text>
+      <!-- canvas -->
+      <rect x="20" y="78" width="560" height="108" rx="6" fill="#fff" stroke="#e0e6ec" stroke-dasharray="4 4"/>
+      <text x="300" y="138" text-anchor="middle" font-size="13" fill="#9aa7b4">Blank report canvas — start by clicking “Get Data”</text>
+    </svg>
+    <figcaption>Figure 8.1 — Power BI Desktop home screen with the blank report canvas.</figcaption>
+  </figure>
+
+  <h3>Step 2 — Get Data → Blank Query</h3>
+  <p>On the <strong>Home</strong> ribbon: <strong>Get Data ▾ → Blank Query</strong>.</p>
+  <figure>
+    <svg viewBox="0 0 380 220" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="380" height="220" rx="8" fill="#f5f9fd" stroke="#d6e3f0"/>
+      <rect x="20" y="16" width="110" height="30" rx="5" fill="#1565c0"/>
+      <text x="75" y="36" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">Get Data ▾</text>
+      <rect x="20" y="50" width="200" height="150" rx="6" fill="#fff" stroke="#d6e3f0"/>
+      <text x="34" y="74" font-size="11" fill="#1c2b3a">Excel Workbook</text>
+      <text x="34" y="100" font-size="11" fill="#1c2b3a">Web</text>
+      <text x="34" y="126" font-size="11" fill="#1c2b3a">SQL Server</text>
+      <rect x="24" y="138" width="192" height="26" rx="5" fill="#e9f2fb"/>
+      <text x="34" y="155" font-size="11" font-weight="bold" fill="#0b4f9c">Blank Query ◀</text>
+      <text x="34" y="184" font-size="11" fill="#1c2b3a">More…</text>
+    </svg>
+    <figcaption>Figure 8.2 — Get Data menu with "Blank Query" selected.</figcaption>
+  </figure>
+
+  <h3>Step 3 — Open the Power Query Editor</h3>
+  <p>From the <strong>Home</strong> tab, click <strong>Advanced Editor</strong>.</p>
+  <figure>
+    <svg viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="600" height="200" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <rect x="0" y="0" width="600" height="30" fill="#1565c0"/>
+      <text x="16" y="20" font-size="12" font-weight="bold" fill="#fff">Advanced Editor — KoboData</text>
+      <rect x="14" y="44" width="572" height="120" rx="5" fill="#0a2540"/>
+      <text x="28" y="66" font-size="11" font-family="monospace" fill="#9ad08f">let</text>
+      <text x="40" y="84" font-size="11" font-family="monospace" fill="#e8f1fb">ApiToken = "YOUR_API_TOKEN_HERE",</text>
+      <text x="40" y="102" font-size="11" font-family="monospace" fill="#e8f1fb">AssetUID = "YOUR_ASSET_UID_HERE",</text>
+      <text x="40" y="120" font-size="11" font-family="monospace" fill="#90caf9">Source = Web.Contents(DataUrl, [Headers=…])</text>
+      <text x="28" y="146" font-size="11" font-family="monospace" fill="#9ad08f">in  ExpandedTable</text>
+      <rect x="500" y="170" width="84" height="22" rx="4" fill="#27ae60"/>
+      <text x="542" y="185" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">Done</text>
+    </svg>
+    <figcaption>Figure 8.3 — Advanced Editor with the documented M script pasted in.</figcaption>
+  </figure>
+
+  <h3>Step 4 — Create the API Connection</h3>
+  <p>Paste the script below and replace <code>YOUR_API_TOKEN_HERE</code> and <code>YOUR_ASSET_UID_HERE</code> with your own values.</p>
+
+  <h4>8.1 Fully Documented Power Query M Script</h4>
+  <pre><code>let
+    // ============================================================
+    // STEP A: Define your connection details
+    // Replace the two values below with YOUR token and asset UID.
+    // ============================================================
+    ApiToken = "YOUR_API_TOKEN_HERE",
+    AssetUID = "YOUR_ASSET_UID_HERE",
+
+    // ============================================================
+    // STEP B: Build the full data endpoint URL
+    // base URL + asset UID + /data/ + ?format=json
+    // ============================================================
+    BaseUrl = "https://kf.kobotoolbox.org/api/v2/assets/",
+    DataUrl = BaseUrl &amp; AssetUID &amp; "/data/?format=json",
+
+    // ============================================================
+    // STEP C: Send an authenticated request
+    // The Authorization header carries "Token &lt;your_token&gt;".
+    // ============================================================
+    Source = Web.Contents(
+        DataUrl,
+        [
+            Headers = [
+                Authorization = "Token " &amp; ApiToken
+            ]
+        ]
+    ),
+
+    // ============================================================
+    // STEP D: Convert raw response into a JSON document
+    // ============================================================
+    JsonResponse = Json.Document(Source),
+
+    // ============================================================
+    // STEP E: Extract the list of submissions ("results")
+    // ============================================================
+    Results = JsonResponse[results],
+
+    // ============================================================
+    // STEP F: Convert the list of records into a table
+    // ============================================================
+    SubmissionsTable = Table.FromList(
+        Results,
+        Splitter.SplitByNothing(),
+        {"Submission"},
+        null,
+        ExtraValues.Error
+    ),
+
+    // ============================================================
+    // STEP G: Expand the records into proper columns
+    // ============================================================
+    FieldNames =
+        if Table.RowCount(SubmissionsTable) &gt; 0
+        then Record.FieldNames(SubmissionsTable{0}[Submission])
+        else {},
+
+    ExpandedTable = Table.ExpandRecordColumn(
+        SubmissionsTable,
+        "Submission",
+        FieldNames
+    )
+in
+    ExpandedTable</code></pre>
+
+  <h3>Step 5 — Apply and Load</h3>
+  <ol>
+    <li>Click <strong>Done</strong> to close the Advanced Editor.</li>
+    <li>If prompted for credentials, choose <strong>Anonymous</strong> (auth is in the header).</li>
+    <li>Rename the query (e.g., <code>KoboData</code>).</li>
+    <li>Click <strong>Close &amp; Apply</strong>.</li>
+  </ol>
+  <div class="callout tip">🎉 Your KoboToolbox submissions are now loaded into Power BI!</div>
+  <figure>
+    <svg viewBox="0 0 600 190" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="600" height="190" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <rect x="0" y="0" width="600" height="28" fill="#1565c0"/>
+      <text x="14" y="19" font-size="12" font-weight="bold" fill="#fff">Power Query Editor — KoboData</text>
+      <!-- header row -->
+      <g font-size="10">
+        <rect x="10" y="34" width="100" height="24" fill="#0a2540"/><text x="20" y="50" fill="#fff">_id</text>
+        <rect x="110" y="34" width="150" height="24" fill="#0a2540"/><text x="120" y="50" fill="#fff">Respondent name</text>
+        <rect x="260" y="34" width="120" height="24" fill="#0a2540"/><text x="270" y="50" fill="#fff">Region</text>
+        <rect x="380" y="34" width="100" height="24" fill="#0a2540"/><text x="390" y="50" fill="#fff">Age</text>
+        <rect x="480" y="34" width="110" height="24" fill="#0a2540"/><text x="490" y="50" fill="#fff">Submission Time</text>
+      </g>
+      <g font-size="10" fill="#1c2b3a">
+        <rect x="10" y="58" width="580" height="22" fill="#fff" stroke="#eef3f8"/>
+        <text x="20" y="73">101</text><text x="120" y="73">Mary Atieno</text><text x="270" y="73">Western</text><text x="390" y="73">34</text><text x="490" y="73">2026-06-22</text>
+        <rect x="10" y="80" width="580" height="22" fill="#f5f9fd" stroke="#eef3f8"/>
+        <text x="20" y="95">102</text><text x="120" y="95">John Otieno</text><text x="270" y="95">Nyanza</text><text x="390" y="95">29</text><text x="490" y="95">2026-06-22</text>
+        <rect x="10" y="102" width="580" height="22" fill="#fff" stroke="#eef3f8"/>
+        <text x="20" y="117">103</text><text x="120" y="117">Grace Wanjiru</text><text x="270" y="117">Central</text><text x="390" y="117">41</text><text x="490" y="117">2026-06-23</text>
+        <rect x="10" y="124" width="580" height="22" fill="#f5f9fd" stroke="#eef3f8"/>
+        <text x="20" y="139">104</text><text x="120" y="139">Peter Mwangi</text><text x="270" y="139">Rift Valley</text><text x="390" y="139">37</text><text x="490" y="139">2026-06-23</text>
+      </g>
+      <text x="14" y="168" font-size="10" fill="#27ae60">✔ Records expanded into columns — 1,248 rows loaded</text>
+    </svg>
+    <figcaption>Figure 8.4 — Power Query preview showing expanded submission columns.</figcaption>
+  </figure>
+
+  <h3>8.2 Line-by-Line Summary</h3>
+  <table>
+    <tr><th>Part</th><th>What It Does</th></tr>
+    <tr><td>URL creation</td><td>Combines base URL + Asset UID + <code>/data/</code> to target submissions</td></tr>
+    <tr><td>Authentication</td><td>Passes <code>Authorization = "Token &lt;token&gt;"</code> header</td></tr>
+    <tr><td><code>Web.Contents</code></td><td>Sends the HTTP request to the API</td></tr>
+    <tr><td><code>Json.Document</code></td><td>Converts the raw response into structured JSON</td></tr>
+    <tr><td><code>results</code></td><td>Extracts the list of submissions</td></tr>
+    <tr><td><code>Table.FromList</code></td><td>Turns the list into rows (one submission per row)</td></tr>
+    <tr><td>Record expansion</td><td>Splits each submission's fields into columns</td></tr>
+  </table>
+  <div class="callout warn">⚠️ Security note: For shared reports, avoid hard-coding the token. Use <strong>Power BI Parameters</strong> or the <strong>Web Authorization</strong> method (see Chapter 14).</div>
+</section>
+
+<!-- ============ CH9 ============ -->
+<section class="page page-break" id="ch9">
+  <span class="chapter-tag">CHAPTER 9</span>
+  <h2 class="chapter">Data Cleaning and Transformation</h2>
+  <p>Raw Kobo data contains system columns (<code>_id</code>, <code>_uuid</code>, <code>_submission_time</code>) and grouped question names (e.g., <code>section_a/age</code>). Clean it before building visuals.</p>
+
+  <h3>9.1 Renaming Columns</h3>
+  <p>Double-click a header and type a friendly name: <code>section_a/age</code> → <strong>Age</strong>, <code>_submission_time</code> → <strong>Submission Time</strong>.</p>
+  <figure>
+    <svg viewBox="0 0 560 130" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="560" height="130" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <rect x="20" y="20" width="240" height="26" fill="#0a2540"/>
+      <text x="30" y="37" font-size="11" font-family="monospace" fill="#fff">section_a/age</text>
+      <text x="280" y="38" font-size="16" fill="#1565c0">➜</text>
+      <rect x="310" y="20" width="240" height="26" fill="#1565c0"/>
+      <text x="320" y="37" font-size="12" font-weight="bold" fill="#fff">Age</text>
+      <text x="20" y="78" font-size="11" fill="#5b6b7b">Double-click the header and type a clean, friendly name.</text>
+      <rect x="20" y="92" width="240" height="22" fill="#e9f2fb" stroke="#90caf9"/>
+      <text x="30" y="107" font-size="11" font-family="monospace" fill="#0a2540">Age|</text>
+    </svg>
+    <figcaption>Figure 9.1 — Renaming a column in Power Query.</figcaption>
+  </figure>
+
+  <h3>9.2 Setting Data Types</h3>
+  <p>Assign correct types: Numbers → Whole/Decimal, Dates → Date/DateTime, Text → Text. Correct types are essential for calculations and time charts.</p>
+
+  <h3>9.3 Date Conversion</h3>
+  <p>Kobo timestamps look like <code>2026-06-22T14:30:00</code>. Set to <strong>Date/Time</strong>, then add a <strong>Date Only</strong> column via <em>Add Column → Date → Date Only</em>.</p>
+
+  <h3>9.4 Handling Missing Values</h3>
+  <ul>
+    <li><strong>Transform → Replace Values</strong> to replace blanks with <code>"N/A"</code> or <code>0</code>.</li>
+    <li><strong>Remove Rows → Remove Blank Rows</strong> to drop empty records.</li>
+    <li>Filter out test submissions if needed.</li>
+  </ul>
+
+  <h3>9.5 Creating Calculated Columns (DAX)</h3>
+  <pre><code>Age Group =
+SWITCH(
+    TRUE(),
+    'KoboData'[Age] &lt; 18, "Under 18",
+    'KoboData'[Age] &lt; 36, "18–35",
+    'KoboData'[Age] &lt; 60, "36–59",
+    "60+"
+)</code></pre>
+  <pre><code>Submission Date = DATE(
+    YEAR('KoboData'[Submission Time]),
+    MONTH('KoboData'[Submission Time]),
+    DAY('KoboData'[Submission Time])
+)</code></pre>
+  <figure>
+    <svg viewBox="0 0 560 140" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="560" height="140" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <rect x="0" y="0" width="560" height="26" fill="#f2c811"/>
+      <text x="14" y="18" font-size="11" font-weight="bold" fill="#3a3a00">fx  Formula bar (DAX)</text>
+      <rect x="14" y="34" width="532" height="26" rx="4" fill="#0a2540"/>
+      <text x="24" y="51" font-size="11" font-family="monospace" fill="#9ad08f">Age Group = SWITCH(TRUE(), [Age]&lt;18,"Under 18", [Age]&lt;36,"18–35", "36+")</text>
+      <!-- result column -->
+      <g font-size="10">
+        <rect x="14" y="72" width="100" height="22" fill="#0a2540"/><text x="24" y="87" fill="#fff">Age</text>
+        <rect x="114" y="72" width="160" height="22" fill="#27ae60"/><text x="124" y="87" fill="#fff" font-weight="bold">Age Group ✨</text>
+      </g>
+      <g font-size="10" fill="#1c2b3a">
+        <rect x="14" y="94" width="100" height="20" fill="#fff" stroke="#eef3f8"/><text x="24" y="108">34</text>
+        <rect x="114" y="94" width="160" height="20" fill="#fff" stroke="#eef3f8"/><text x="124" y="108">18–35</text>
+        <rect x="14" y="114" width="100" height="20" fill="#f5f9fd" stroke="#eef3f8"/><text x="24" y="128">41</text>
+        <rect x="114" y="114" width="160" height="20" fill="#f5f9fd" stroke="#eef3f8"/><text x="124" y="128">36+</text>
+      </g>
+    </svg>
+    <figcaption>Figure 9.2 — A new calculated column created with DAX.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ CH10 ============ -->
+<section class="page page-break" id="ch10">
+  <span class="chapter-tag">CHAPTER 10</span>
+  <h2 class="chapter">Building Power BI Dashboards</h2>
+  <p>With clean data, build professional dashboards. Below are three ready-to-use blueprints.</p>
+
+  <h3>10.1 Survey Monitoring Dashboard</h3>
+  <p><strong>Purpose:</strong> Track collection progress in real time.</p>
+  <ul>
+    <li><strong>Total Responses</strong> → <code>COUNTROWS('KoboData')</code></li>
+    <li><strong>Responses Today</strong> → count where <code>Submission Date = TODAY()</code></li>
+    <li><strong>Completion Rate</strong> → completed ÷ total submissions</li>
+    <li><strong>Active Enumerators</strong> → <code>DISTINCTCOUNT('KoboData'[Enumerator])</code></li>
+  </ul>
+  <pre><code>Responses Today =
+CALCULATE(
+    COUNTROWS('KoboData'),
+    'KoboData'[Submission Date] = TODAY()
+)</code></pre>
+  <figure>
+    <svg viewBox="0 0 620 320" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="620" height="320" rx="10" fill="#eef4fa"/>
+      <rect x="0" y="0" width="620" height="40" fill="#0a2540"/>
+      <text x="16" y="26" fill="#fff" font-size="15" font-weight="bold">Survey Monitoring Dashboard</text>
+      <!-- KPI cards -->
+      <g>
+        <rect x="16"  y="54" width="140" height="64" rx="8" fill="#fff" stroke="#d6e3f0"/><text x="86"  y="92" text-anchor="middle" font-size="24" font-weight="bold" fill="#1565c0">1,248</text><text x="86"  y="110" text-anchor="middle" font-size="10" fill="#5b6b7b">TOTAL RESPONSES</text>
+        <rect x="168" y="54" width="140" height="64" rx="8" fill="#fff" stroke="#d6e3f0"/><text x="238" y="92" text-anchor="middle" font-size="24" font-weight="bold" fill="#27ae60">87</text><text x="238" y="110" text-anchor="middle" font-size="10" fill="#5b6b7b">RESPONSES TODAY</text>
+        <rect x="320" y="54" width="140" height="64" rx="8" fill="#fff" stroke="#d6e3f0"/><text x="390" y="92" text-anchor="middle" font-size="24" font-weight="bold" fill="#1e88e5">94%</text><text x="390" y="110" text-anchor="middle" font-size="10" fill="#5b6b7b">COMPLETION RATE</text>
+        <rect x="472" y="54" width="132" height="64" rx="8" fill="#fff" stroke="#d6e3f0"/><text x="538" y="92" text-anchor="middle" font-size="24" font-weight="bold" fill="#8e44ad">12</text><text x="538" y="110" text-anchor="middle" font-size="10" fill="#5b6b7b">ENUMERATORS</text>
+      </g>
+      <!-- line chart -->
+      <rect x="16" y="132" width="290" height="172" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="30" y="154" font-size="12" font-weight="bold" fill="#0a2540">Submissions Over Time</text>
+      <polyline points="34,280 80,250 126,255 172,215 218,225 264,180 296,170" fill="none" stroke="#1565c0" stroke-width="3"/>
+      <polygon points="34,280 80,250 126,255 172,215 218,225 264,180 296,170 296,294 34,294" fill="#1565c0" opacity="0.12"/>
+      <g fill="#1565c0"><circle cx="80" cy="250" r="3"/><circle cx="172" cy="215" r="3"/><circle cx="264" cy="180" r="3"/></g>
+      <!-- bar chart -->
+      <rect x="318" y="132" width="286" height="172" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="332" y="154" font-size="12" font-weight="bold" fill="#0a2540">Submissions by Enumerator</text>
+      <g fill="#1e88e5">
+        <rect x="346" y="200" width="30" height="90"/><rect x="392" y="180" width="30" height="110"/><rect x="438" y="220" width="30" height="70"/>
+        <rect x="484" y="166" width="30" height="124"/><rect x="530" y="234" width="30" height="56"/><rect x="566" y="210" width="26" height="80"/>
+      </g>
+    </svg>
+    <figcaption>Figure 10.1 — Survey Monitoring Dashboard (blue/white theme).</figcaption>
+  </figure>
+
+  <h3>10.2 Geographic Dashboard</h3>
+  <p><strong>Purpose:</strong> See <em>where</em> data comes from using Kobo GPS questions.</p>
+  <ul>
+    <li>Map visual plotting submission GPS points</li>
+    <li>Filled Map by Region / County / District</li>
+    <li>Slicers and drill-down: Region → County → District</li>
+  </ul>
+  <figure>
+    <svg viewBox="0 0 620 280" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="620" height="280" rx="10" fill="#eef4fa"/>
+      <rect x="0" y="0" width="620" height="38" fill="#0a2540"/>
+      <text x="16" y="25" fill="#fff" font-size="15" font-weight="bold">Geographic Dashboard</text>
+      <!-- map area -->
+      <rect x="16" y="52" width="380" height="212" rx="8" fill="#dbe9f6" stroke="#d6e3f0"/>
+      <!-- abstract regions -->
+      <path d="M40,90 L150,70 L180,140 L90,180 Z" fill="#90caf9" stroke="#fff" stroke-width="2"/>
+      <path d="M180,140 L150,70 L260,80 L280,150 Z" fill="#1e88e5" stroke="#fff" stroke-width="2"/>
+      <path d="M90,180 L180,140 L210,230 L110,240 Z" fill="#1565c0" stroke="#fff" stroke-width="2"/>
+      <path d="M280,150 L260,80 L360,110 L350,200 L210,230 L180,140 Z" fill="#0b4f9c" stroke="#fff" stroke-width="2"/>
+      <!-- pins -->
+      <g fill="#e53935"><circle cx="120" cy="130" r="5"/><circle cx="220" cy="120" r="5"/><circle cx="180" cy="200" r="5"/><circle cx="300" cy="160" r="5"/></g>
+      <!-- legend / slicer -->
+      <rect x="408" y="52" width="196" height="212" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="422" y="74" font-size="12" font-weight="bold" fill="#0a2540">Submissions by Region</text>
+      <g font-size="11" fill="#1c2b3a">
+        <rect x="422" y="86" width="14" height="14" fill="#0b4f9c"/><text x="444" y="98">Rift Valley — 420</text>
+        <rect x="422" y="110" width="14" height="14" fill="#1565c0"/><text x="444" y="122">Western — 305</text>
+        <rect x="422" y="134" width="14" height="14" fill="#1e88e5"/><text x="444" y="146">Nyanza — 268</text>
+        <rect x="422" y="158" width="14" height="14" fill="#90caf9"/><text x="444" y="170">Central — 255</text>
+      </g>
+      <text x="422" y="200" font-size="10" fill="#5b6b7b">Drill-down:</text>
+      <text x="422" y="216" font-size="10" fill="#0b4f9c" font-weight="bold">Region ▸ County ▸ District</text>
+    </svg>
+    <figcaption>Figure 10.2 — Geographic dashboard with regional coloring and GPS pins.</figcaption>
+  </figure>
+  <div class="callout tip">💡 Split a Kobo GPS field (<code>"lat lng alt acc"</code>) by space in Power Query to get separate Latitude and Longitude columns.</div>
+
+  <h3>10.3 Monitoring &amp; Evaluation (M&amp;E) Dashboard</h3>
+  <p><strong>Purpose:</strong> Measure program performance against targets.</p>
+  <ul>
+    <li>Project Progress → actual vs. target (gauge)</li>
+    <li>Beneficiary Tracking → unique beneficiaries reached</li>
+    <li>Survey Performance → response trends, data quality flags</li>
+  </ul>
+  <pre><code>Target Achievement % =
+DIVIDE(
+    [Total Beneficiaries Reached],
+    [Program Target],
+    0
+) * 100</code></pre>
+  <figure>
+    <svg viewBox="0 0 620 270" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="620" height="270" rx="10" fill="#eef4fa"/>
+      <rect x="0" y="0" width="620" height="38" fill="#0a2540"/>
+      <text x="16" y="25" fill="#fff" font-size="15" font-weight="bold">Monitoring &amp; Evaluation Dashboard</text>
+      <!-- gauge -->
+      <rect x="16" y="52" width="190" height="200" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="111" y="74" text-anchor="middle" font-size="12" font-weight="bold" fill="#0a2540">Target Achievement</text>
+      <path d="M46,180 A65,65 0 0,1 176,180" fill="none" stroke="#e3eaf1" stroke-width="16"/>
+      <path d="M46,180 A65,65 0 0,1 165,140" fill="none" stroke="#27ae60" stroke-width="16"/>
+      <text x="111" y="172" text-anchor="middle" font-size="30" font-weight="bold" fill="#27ae60">78%</text>
+      <text x="111" y="210" text-anchor="middle" font-size="10" fill="#5b6b7b">of program target</text>
+      <!-- beneficiaries bar -->
+      <rect x="218" y="52" width="386" height="96" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="232" y="74" font-size="12" font-weight="bold" fill="#0a2540">Beneficiaries by Program</text>
+      <g font-size="9" fill="#1c2b3a">
+        <text x="232" y="96">Health</text><rect x="290" y="88" width="200" height="10" rx="3" fill="#1565c0"/>
+        <text x="232" y="116">Education</text><rect x="290" y="108" width="150" height="10" rx="3" fill="#1e88e5"/>
+        <text x="232" y="136">Agriculture</text><rect x="290" y="128" width="120" height="10" rx="3" fill="#90caf9"/>
+      </g>
+      <!-- progress tracker -->
+      <rect x="218" y="156" width="386" height="96" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <text x="232" y="178" font-size="12" font-weight="bold" fill="#0a2540">Project Progress</text>
+      <rect x="232" y="190" width="358" height="16" rx="8" fill="#e3eaf1"/>
+      <rect x="232" y="190" width="270" height="16" rx="8" fill="#27ae60"/>
+      <text x="232" y="232" font-size="10" fill="#5b6b7b">6,240 of 8,000 beneficiaries reached</text>
+    </svg>
+    <figcaption>Figure 10.3 — M&amp;E dashboard with progress gauges and beneficiary tracking.</figcaption>
+  </figure>
+</section>
+
+<!-- ============ CH11 ============ -->
+<section class="page page-break" id="ch11">
+  <span class="chapter-tag">CHAPTER 11</span>
+  <h2 class="chapter">Automatic Refresh Strategies</h2>
+  <p>A dashboard is only valuable if it stays current. Here is how to keep Kobo data fresh automatically.</p>
+
+  <h3>11.1 Power BI Service</h3>
+  <p><strong>Publish</strong> your report to the <strong>Power BI Service</strong> (app.powerbi.com), where scheduled refresh lives.</p>
+  <h3>11.2 Scheduled Refresh</h3>
+  <p><strong>Dataset → Settings → Scheduled refresh</strong>. Set a frequency; Power BI re-runs the M query and pulls new submissions automatically.</p>
+  <figure>
+    <svg viewBox="0 0 560 200" xmlns="http://www.w3.org/2000/svg" font-family="Segoe UI,Arial,sans-serif">
+      <rect x="0" y="0" width="560" height="200" rx="8" fill="#fff" stroke="#d6e3f0"/>
+      <rect x="0" y="0" width="560" height="32" fill="#f2c811"/>
+      <text x="14" y="21" font-size="12" font-weight="bold" fill="#3a3a00">Power BI Service · Dataset Settings</text>
+      <text x="20" y="58" font-size="13" font-weight="bold" fill="#0a2540">Scheduled refresh</text>
+      <!-- toggle -->
+      <rect x="20" y="70" width="42" height="20" rx="10" fill="#27ae60"/><circle cx="52" cy="80" r="8" fill="#fff"/>
+      <text x="74" y="84" font-size="11" fill="#1c2b3a">On — keep your data up to date</text>
+      <text x="20" y="116" font-size="11" fill="#5b6b7b">Refresh frequency</text>
+      <rect x="20" y="124" width="160" height="26" rx="5" fill="#e9f2fb" stroke="#90caf9"/><text x="32" y="141" font-size="11" fill="#0a2540">Daily ▾</text>
+      <text x="210" y="116" font-size="11" fill="#5b6b7b">Time</text>
+      <rect x="210" y="124" width="120" height="26" rx="5" fill="#e9f2fb" stroke="#90caf9"/><text x="222" y="141" font-size="11" fill="#0a2540">06:00 AM</text>
+      <rect x="360" y="124" width="80" height="26" rx="5" fill="#1565c0"/><text x="400" y="141" text-anchor="middle" font-size="11" font-weight="bold" fill="#fff">+ Add time</text>
+      <text x="20" y="180" font-size="10" fill="#27ae60">✔ Last refresh succeeded · Next: tomorrow 06:00 AM</text>
+    </svg>
+    <figcaption>Figure 11.1 — Scheduled refresh settings in the Power BI Service.</figcaption>
+  </figure>
+  <h3>11.3 API Refresh</h3>
+  <p>Each refresh re-calls the <code>/data/</code> endpoint and gets the latest records — no manual export.</p>
+  <h3>11.4 Gateway Requirements</h3>
+  <ul>
+    <li>The Kobo API is a public web source, so refresh via <code>Web.Contents</code> generally works <strong>without</strong> an on-premises gateway.</li>
+    <li>A <strong>gateway</strong> may be needed if data is wrapped through a local file, database, or VPN.</li>
+    <li>Set stored credentials to <strong>Anonymous</strong> (token is in the query).</li>
+  </ul>
+  <h3>11.5 Refresh Limitations</h3>
+  <table>
+    <tr><th>Plan</th><th>Max Scheduled Refreshes/Day</th></tr>
+    <tr><td>Power BI Pro</td><td>8 per day</td></tr>
+    <tr><td>Power BI Premium / PPU</td><td>48 per day</td></tr>
+  </table>
+  <h3>11.6 Best Practices</h3>
+  <ul>
+    <li>✅ Schedule refresh during off-peak hours.</li>
+    <li>✅ Keep queries lean — pull only needed columns.</li>
+    <li>✅ Use incremental refresh (Premium) for very large forms.</li>
+    <li>✅ Monitor refresh history and set failure alerts.</li>
+  </ul>
+</section>
+
+<!-- ============ CH12 ============ -->
+<section class="page page-break" id="ch12">
+  <span class="chapter-tag">CHAPTER 12</span>
+  <h2 class="chapter">Connecting KoboToolbox to Other Visualization Tools</h2>
+  <p>The same API works far beyond Power BI. Here is how to connect five other popular tools.</p>
+
+  <h3>12.1 Excel (Power Query)</h3>
+  <p><strong>Why:</strong> Familiar, great for quick analysis. <strong>How:</strong> <em>Data → Get Data → From Other Sources → Blank Query</em> → paste the same M script. <strong>Benefit:</strong> Automated, refreshable Excel reports.</p>
+
+  <h3>12.2 Tableau</h3>
+  <p><strong>Why:</strong> Powerful enterprise visualizations. <strong>How:</strong> Use the Web Data Connector or a script extract, then connect Tableau. <strong>Benefit:</strong> Polished dashboards for large audiences.</p>
+
+  <h3>12.3 Google Looker Studio</h3>
+  <p><strong>Why:</strong> Free, cloud-based sharing. <strong>How:</strong> Use a Community Connector or route the API through Google Sheets (Apps Script). <strong>Benefit:</strong> Web dashboards accessible anywhere.</p>
+
+  <h3>12.4 Python</h3>
+  <p><strong>Why:</strong> Flexibility for analysis, automation, ML.</p>
+  <pre><code>import requests
+import pandas as pd
+
+TOKEN = "YOUR_API_TOKEN_HERE"
+ASSET = "YOUR_ASSET_UID_HERE"
+url = f"https://kf.kobotoolbox.org/api/v2/assets/{ASSET}/data/?format=json"
+
+response = requests.get(url, headers={"Authorization": f"Token {TOKEN}"})
+data = response.json()["results"]
+df = pd.DataFrame(data)
+print(df.head())</code></pre>
+
+  <h3>12.5 R</h3>
+  <pre><code>library(httr)
+library(jsonlite)
+
+token <- "YOUR_API_TOKEN_HERE"
+asset <- "YOUR_ASSET_UID_HERE"
+url <- paste0("https://kf.kobotoolbox.org/api/v2/assets/", asset, "/data/?format=json")
+
+res <- GET(url, add_headers(Authorization = paste("Token", token)))
+data <- fromJSON(content(res, "text"))$results
+head(data)</code></pre>
+
+  <h3>12.6 SQL Databases</h3>
+  <p><strong>Why:</strong> Central, scalable storage. <strong>How:</strong> A scheduled ETL script calls the API and INSERTs records into PostgreSQL/MySQL/SQL Server; then connect any BI tool. <strong>Benefit:</strong> A single warehouse with fast queries.</p>
+
+  <table>
+    <tr><th>Tool</th><th>Best For</th><th>Skill Level</th></tr>
+    <tr><td>Excel</td><td>Quick reports</td><td>Beginner</td></tr>
+    <tr><td>Power BI</td><td>Interactive dashboards</td><td>Beginner–Intermediate</td></tr>
+    <tr><td>Looker Studio</td><td>Free web sharing</td><td>Beginner</td></tr>
+    <tr><td>Tableau</td><td>Enterprise visuals</td><td>Intermediate</td></tr>
+    <tr><td>Python</td><td>Automation &amp; ML</td><td>Intermediate–Advanced</td></tr>
+    <tr><td>R</td><td>Statistics &amp; research</td><td>Intermediate–Advanced</td></tr>
+    <tr><td>SQL</td><td>Central data warehouse</td><td>Advanced</td></tr>
+  </table>
+</section>
+
+<!-- ============ CH13 ============ -->
+<section class="page page-break" id="ch13">
+  <span class="chapter-tag">CHAPTER 13</span>
+  <h2 class="chapter">Common Errors and Troubleshooting</h2>
+  <h3>13.1 Troubleshooting Table</h3>
+  <table>
+    <tr><th>Error</th><th>Cause</th><th>Solution</th></tr>
+    <tr><td>401 Unauthorized</td><td>Invalid or expired token</td><td>Regenerate the API token and update the query</td></tr>
+    <tr><td>No Data Returned</td><td>Wrong Asset ID</td><td>Verify the Asset UID from the form URL</td></tr>
+    <tr><td>404 Not Found</td><td>Wrong URL / server</td><td>Check base URL and server (kf vs eu)</td></tr>
+    <tr><td>Refresh Failure</td><td>API timeout / large data</td><td>Optimize and filter queries; schedule off-peak</td></tr>
+    <tr><td>403 Forbidden</td><td>Token lacks permission</td><td>Ensure the token owner has access to that form</td></tr>
+    <tr><td>Empty results</td><td>Form not deployed / no submissions</td><td>Deploy the form and collect a submission</td></tr>
+    <tr><td>Credential prompt loops</td><td>Wrong auth method</td><td>Set credentials to Anonymous</td></tr>
+    <tr><td>Formula.Firewall error</td><td>Privacy level conflict</td><td>Set privacy to Public/Organizational</td></tr>
+    <tr><td>Special characters broken</td><td>Encoding issue</td><td>Ensure <code>?format=json</code>; check encoding</td></tr>
+  </table>
+  <h3>13.2 Diagnostic Steps</h3>
+  <ol>
+    <li>Test the URL in a browser (while logged in) — does it return JSON?</li>
+    <li>Verify the token at <code>/token/?format=json</code>.</li>
+    <li>Confirm deployment status in KoboToolbox.</li>
+    <li>Check submission count — is it greater than zero?</li>
+    <li>Re-paste the M script carefully — a missing quote breaks everything.</li>
+  </ol>
+  <div class="callout tip">💡 Pro tip: Build and test with a <em>small</em> form first, then scale up with confidence.</div>
+</section>
+
+<!-- ============ CH14 ============ -->
+<section class="page page-break" id="ch14">
+  <span class="chapter-tag">CHAPTER 14</span>
+  <h2 class="chapter">Security and Best Practices</h2>
+  <h3>14.1 Protecting API Tokens</h3>
+  <ul>
+    <li>🔐 Never commit tokens to GitHub, share in chats, or embed in public reports.</li>
+    <li>Use <strong>Power BI Parameters</strong> instead of hard-coding.</li>
+    <li>Store tokens in a password manager or secret vault.</li>
+    <li>Regenerate immediately if exposed.</li>
+  </ul>
+  <h3>14.2 Data Governance</h3>
+  <ul>
+    <li>Define who owns the data and who may access it.</li>
+    <li>Comply with GDPR, local laws, and donor requirements.</li>
+    <li>Anonymize personal identifiers before wide sharing.</li>
+  </ul>
+  <h3>14.3 User Access Management</h3>
+  <ul>
+    <li>Use Power BI workspace roles (Admin, Member, Viewer).</li>
+    <li>Apply Row-Level Security (RLS) per region/project.</li>
+    <li>In KoboToolbox, share forms with least privilege.</li>
+  </ul>
+  <h3>14.4 Backup Strategies</h3>
+  <ul>
+    <li>Keep periodic Excel/CSV exports as offline backups.</li>
+    <li>Use Kobo's media &amp; data export for archival.</li>
+    <li>Back up Power BI <code>.pbix</code> files in version-controlled storage.</li>
+  </ul>
+  <h3>14.5 Refresh Optimization</h3>
+  <ul>
+    <li>Pull only needed columns and rows.</li>
+    <li>Use incremental refresh for large datasets.</li>
+    <li>Avoid over-frequent refreshes that strain the API.</li>
+  </ul>
+  <div class="callout key">✅ Golden rule: Treat survey data as if it describes your own family — secure it, respect it, and use it ethically.</div>
+</section>
+
+<!-- ============ CH15 ============ -->
+<section class="page page-break" id="ch15">
+  <span class="chapter-tag">CHAPTER 15</span>
+  <h2 class="chapter">Real-World Use Cases</h2>
+
+  <h3>15.1 Health Surveys</h3>
+  <p><strong>Scenario:</strong> A health NGO runs a maternal-health survey across 30 clinics. <strong>Solution:</strong> Kobo Collect captures visits; Power BI shows live antenatal coverage by clinic. <strong>Value:</strong> Managers spot under-served clinics within hours.</p>
+  <h3>15.2 Education Programs</h3>
+  <p><strong>Scenario:</strong> Monitoring school attendance and outcomes. <strong>Solution:</strong> Weekly submissions feed a trend dashboard. <strong>Value:</strong> Drop-out spikes detected early.</p>
+  <h3>15.3 Agriculture Projects</h3>
+  <p><strong>Scenario:</strong> Tracking farmer training and yields. <strong>Solution:</strong> GPS-tagged visits feed a geographic dashboard. <strong>Value:</strong> Donors see live coverage maps; teams optimize routes.</p>
+  <h3>15.4 Humanitarian Response</h3>
+  <p><strong>Scenario:</strong> Rapid needs assessment after a flood. <strong>Solution:</strong> Offline forms sync later; Power BI aggregates needs by camp. <strong>Value:</strong> Aid prioritized to highest-need locations within a day.</p>
+  <h3>15.5 Government Census Activities</h3>
+  <p><strong>Scenario:</strong> A county household registration. <strong>Solution:</strong> Hundreds of enumerators submit data; a dashboard tracks coverage by ward. <strong>Value:</strong> Officials monitor progress live and ensure full enumeration.</p>
+
+  <table>
+    <tr><th>Sector</th><th>Key Metric</th><th>Business Value</th></tr>
+    <tr><td>Health</td><td>Clinic coverage</td><td>Better care targeting</td></tr>
+    <tr><td>Education</td><td>Attendance rate</td><td>Early dropout prevention</td></tr>
+    <tr><td>Agriculture</td><td>Farm visits / yield</td><td>Optimized field operations</td></tr>
+    <tr><td>Humanitarian</td><td>Needs by camp</td><td>Faster, fairer aid</td></tr>
+    <tr><td>Government</td><td>Coverage by ward</td><td>Complete, accountable census</td></tr>
+  </table>
+</section>
+
+<!-- ============ CH16 ============ -->
+<section class="page page-break" id="ch16">
+  <span class="chapter-tag">CHAPTER 16</span>
+  <h2 class="chapter">Conclusion</h2>
+  <h3>16.1 KoboToolbox Capabilities</h3>
+  <p>KoboToolbox is a powerful, free platform for <strong>professional digital data collection</strong> — offline-capable, secure, and flexible enough for NGOs, governments, researchers, and humanitarian responders.</p>
+  <h3>16.2 Benefits of API Integration</h3>
+  <p>The <strong>new REST API (v2)</strong> transforms reporting from a manual chore into an <strong>automated, real-time service</strong>. Token-based authentication keeps it secure; JSON keeps it clean.</p>
+  <h3>16.3 Advantages of Power BI Reporting</h3>
+  <p>Power BI turns raw submissions into <strong>interactive, decision-ready dashboards</strong> that update on a schedule and reach stakeholders anywhere.</p>
+  <h3>16.4 The Future of Real-Time Survey Analytics</h3>
+  <p>Organizations will increasingly rely on <strong>live data pipelines</strong>: from a phone in the field to a dashboard in the boardroom — instantly. Mastering the Kobo → Power BI connection today positions you at the forefront of modern, evidence-driven decision-making.</p>
+  <div class="callout key">🌟 Final word: Data collected is potential. Data connected is power. Connect your KoboToolbox to Power BI — and turn fieldwork into insight.</div>
+</section>
+
+<!-- ============ GLOSSARY ============ -->
+<section class="page page-break" id="glossary">
+  <h2 class="chapter">Glossary of Technical Terms</h2>
+  <table>
+    <tr><th>Term</th><th>Meaning</th></tr>
+    <tr><td>API</td><td>Application Programming Interface — a secure way for software to request data</td></tr>
+    <tr><td>REST API</td><td>A standard, web-based API style using URLs and HTTP</td></tr>
+    <tr><td>Asset / Form</td><td>A questionnaire built in KoboToolbox</td></tr>
+    <tr><td>Asset ID (UID)</td><td>The unique identifier of a form</td></tr>
+    <tr><td>Authentication</td><td>Proving identity to access data (via a token)</td></tr>
+    <tr><td>API Token</td><td>A secret key that authorizes API requests</td></tr>
+    <tr><td>Endpoint</td><td>A specific API URL that returns particular data</td></tr>
+    <tr><td>JSON</td><td>JavaScript Object Notation — a structured data format</td></tr>
+    <tr><td>Submission</td><td>One completed survey record</td></tr>
+    <tr><td>Enumerator</td><td>A person who collects data in the field</td></tr>
+    <tr><td>Power Query / M</td><td>Power BI's data-transformation engine and language</td></tr>
+    <tr><td>DAX</td><td>Data Analysis Expressions — Power BI's calculation language</td></tr>
+    <tr><td>KPI</td><td>Key Performance Indicator — a headline metric</td></tr>
+    <tr><td>M&amp;E</td><td>Monitoring &amp; Evaluation</td></tr>
+    <tr><td>RLS</td><td>Row-Level Security — restricts data per user</td></tr>
+    <tr><td>Gateway</td><td>A bridge for refreshing on-premises data sources</td></tr>
+    <tr><td>Scheduled Refresh</td><td>Automatic data updates in the Power BI Service</td></tr>
+    <tr><td>Enketo</td><td>KoboToolbox's web-based form-filling tool</td></tr>
+  </table>
+</section>
+
+<!-- ============ REFERENCES ============ -->
+<section class="page page-break" id="references">
+  <h2 class="chapter">References</h2>
+  <ol>
+    <li>KoboToolbox Official Documentation — <a href="https://support.kobotoolbox.org">support.kobotoolbox.org</a></li>
+    <li>KoboToolbox API (v2) Reference — <a href="https://kf.kobotoolbox.org/api/v2/">kf.kobotoolbox.org/api/v2/</a></li>
+    <li>Microsoft Power BI Documentation — <a href="https://learn.microsoft.com/power-bi/">learn.microsoft.com/power-bi</a></li>
+    <li>Power Query M Language Reference — <a href="https://learn.microsoft.com/powerquery-m/">learn.microsoft.com/powerquery-m</a></li>
+    <li>DAX Function Reference — <a href="https://learn.microsoft.com/dax/">learn.microsoft.com/dax</a></li>
+    <li>Harvard Humanitarian Initiative — <a href="https://hhi.harvard.edu">hhi.harvard.edu</a></li>
+    <li>Power BI Scheduled Refresh — <a href="https://learn.microsoft.com/power-bi/connect-data/refresh-scheduled-refresh">Microsoft Docs</a></li>
+    <li>KoboToolbox Data Privacy &amp; Security — <a href="https://www.kobotoolbox.org/privacy/">kobotoolbox.org/privacy</a></li>
+  </ol>
+
+  <hr>
+  <div class="author-footer">
+    <div class="name">Joel Jenkins Ekisa</div>
+    <div class="role">Data &amp; Business Analyst · Power BI Developer · Data Operations Consultant</div>
+    📧 <a href="mailto:joeljenkinsekisa@gmail.com">joeljenkinsekisa@gmail.com</a> ·
+    💻 <a href="https://github.com/joeljenkinsekisa">GitHub</a> ·
+    🌐 <a href="https://joeljenkinsekisa.github.io/JENKINS-EKISA-JOE-PORTFORLIO/">Portfolio</a> ·
+    🔗 LinkedIn: Joel Jenkins Ekisa
+  </div>
+  <p class="copyright">© 2026 Joel Jenkins Ekisa. Prepared for training, research, and publication purposes.</p>
+</section>
+
+</body>
+</html>
